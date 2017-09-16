@@ -28,7 +28,7 @@
   "author": "",
   "license": "MIT",
   "dependencies": {
-    "@angular/animations": "~4.3.1",
+    "@angular/animations": "^4.3.6",
     "@angular/common": "~4.3.1",
     "@angular/compiler": "~4.3.1",
     "@angular/compiler-cli": "~4.3.1",
