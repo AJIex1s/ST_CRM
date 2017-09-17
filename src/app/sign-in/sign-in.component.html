@@ -1,11 +1,11 @@
-<div class="auth-form-wrapper-container">
+<div class="sign-in-form-wrapper-container">
     <div class="auth-component-content">
-        <div class="auth-form-wrapper">
-            <form class="auth-form">
+        <div class="sign-in-form-wrapper">
+            <form class="sign-in-form" name="form" (ngSubmit)="f.form.valid && SignIn()" #f="ngForm" novalidate>
                 <div class="form-label">
                     <h1>Sign In</h1>
                 </div>
-                <md-form-field class="form-field">
+                <md-form-field class="form-field" [ngClass]="{ 'has-error': f.submitted && !username.valid }">
                     <input mdInput placeholder="E-mail or phone">
                 </md-form-field>
                 <md-form-field class="form-field">
