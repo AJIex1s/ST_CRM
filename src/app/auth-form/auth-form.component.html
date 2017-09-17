@@ -1,20 +1,23 @@
-<div class="auth-form-container">
-    <div class="auth-form-content-wrapper">
-        <div class="form-label">CRM -</div>
-
-        <form class="auth-form">
-            <div class="form-label">
-                <h1>Sign In</h1>
-            </div>
-            <md-form-field class="form-field">
-                <input mdInput placeholder="E-mail or phone">
-            </md-form-field>
-            <md-form-field class="form-field">
-                <input mdInput placeholder="Enter your password">
-            </md-form-field>
-            <div class="restore-crdentials-container">
-                <a md-button routerLink="." color="primary">Forgot your login or password?</a>
-            </div>
-        </form>
+<div class="auth-form-wrapper-container">
+    <div class="auth-component-content">
+        <div class="auth-form-wrapper">
+            <form class="auth-form">
+                <div class="form-label">
+                    <h1>Sign In</h1>
+                </div>
+                <md-form-field class="form-field">
+                    <input mdInput placeholder="E-mail or phone">
+                </md-form-field>
+                <md-form-field class="form-field">
+                    <input mdInput placeholder="Enter your password">
+                </md-form-field>
+                <div class="restore-container">
+                    <a md-button routerLink="." color="primary">Forgot your login or password?</a>
+                </div>
+                <div class="submit-container">
+                    <button md-raised-button color="primary">Sign In</button>
+                </div>
+            </form>
+        </div>
     </div>
 </div>
