@@ -4,7 +4,7 @@ import { Router } from '@angular/router';
 import { AuthenticationService } from '../services/index';
 
 @Component({
-  moduleId: module.id,
+  moduleId: module.id.toString(),
   selector: 'sign-in-form',
   templateUrl: './sign-in.component.html',
   styleUrls: ['./sign-in.component.css']

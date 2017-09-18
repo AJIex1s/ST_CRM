@@ -8,7 +8,7 @@ const appRoutes: Routes = [
     { path: 'sign-in', component: SignInComponent },
     { path: '', component: HomeComponent, canActivate: [AuthGuard] },
 
-    // otherwise redirect to home
+    // otherwise redirect to home   
     { path: '**', redirectTo: '' }
 ];
 
