@@ -9,6 +9,8 @@
     position: relative;
     max-width: 100%;
     min-width: 250px;
+
+    background: #E7E7E7;
 }
   
 .auth-component-content {
@@ -88,7 +90,7 @@
        display: flex;
        -webkit-flex-direction: column;
        flex-direction: column;
-       min-height: 96vh;
+       min-height: 100vh;
        position: relative;
      }
 }
