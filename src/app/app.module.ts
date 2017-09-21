@@ -5,7 +5,8 @@ import { HttpModule } from '@angular/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {  MdInputModule,
           MdFormFieldModule,
-          MdButtonModule 
+          MdButtonModule,
+          MdSidenavModule
         } from '@angular/material';
 
 // used to create fake backend
@@ -32,7 +33,8 @@ import { SignInComponent } from './sign-in/sign-in.component';
     routing,
     MdFormFieldModule,
     MdInputModule,
-    MdButtonModule
+    MdButtonModule,
+    MdSidenavModule
   ],
   declarations: [
     AppComponent,

@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { MdSidenav } from '@angular/material'
 
 import { User } from '../models/index';
 import { UserService } from '../services/index';
@@ -10,7 +11,9 @@ import { UserService } from '../services/index';
 })
 
 export class HomeComponent implements OnInit {
+    @ViewChild('sidenav') sidenav: MdSidenav
     users: User[] = [];
+    isMobileView: boolean;
 
     constructor(private userService: UserService) { }
 
@@ -20,6 +23,10 @@ export class HomeComponent implements OnInit {
             .subscribe(users => {
                 this.users = users;
             });
+    
+        this.isMobileView = window.innerWidth < 601;
+        window.onresize = (e) => {
+            this.isMobileView = window.innerWidth < 601;
+        };
     }
-
 }

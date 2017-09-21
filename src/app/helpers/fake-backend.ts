@@ -17,7 +17,7 @@ export var fakeBackendFactory = function(backend: MockBackend, options: BaseRequ
                 // check user credentials and return fake jwt token if valid
                 if (params.username === testUser.username && params.password === testUser.password) {
                     connection.mockRespond(new Response(
-                        new ResponseOptions({ status: 200, body: { token: 'fake-jwt-token' } })
+                        new ResponseOptions({ status: 200, body: { token: 'fake_access_token' } })
                     ));
                 } else {
                     connection.mockRespond(new Response(
@@ -30,7 +30,7 @@ export var fakeBackendFactory = function(backend: MockBackend, options: BaseRequ
             if (connection.request.url.endsWith('/api/users') && connection.request.method === RequestMethod.Get) {
                 // check for fake auth token in header and return test users if valid, this security is implemented server side
                 // in a real application
-                if (connection.request.headers.get('Authorization') === 'Bearer fake-jwt-token') {
+                if (connection.request.headers.get('Authorization') === 'Bearer fake_access_token') {
                     connection.mockRespond(new Response(
                         new ResponseOptions({ status: 200, body: [testUser] })
                     ));

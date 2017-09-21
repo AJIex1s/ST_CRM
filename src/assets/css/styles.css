@@ -1,16 +1,37 @@
 body {
-    font-family: Arial, Helvetica, sans-serif;  
+    font-family: Arial, Helvetica, sans-serif;
     margin: 0 !important;
 }
+
 h1 {
     font-size: 24px;
     font-weight: 400;
     line-height: 32px;
 }
+
 a {
     color: #2196F3;
 }
+
 my-app {
     width: 100%;
     height: 100%;
+}
+
+.display-flex {
+    display: -webkit-box;
+    display: -moz-box;
+    display: -ms-flexbox;
+    display: -webkit-flex;
+    display: flex;
+}
+
+.form-shadow {
+    -webkit-box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.15), 0 3px 1px -2px rgba(0, 0, 0, 0.13), 0 1px 5px 0 rgba(0, 0, 0, 0.21);
+    box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.15), 0 3px 1px -2px rgba(0, 0, 0, 0.13), 0 1px 5px 0 rgba(0, 0, 0, 0.21);
+}
+
+.flex-direction-column {
+    -webkit-flex-direction: column;
+    flex-direction: column;
 }

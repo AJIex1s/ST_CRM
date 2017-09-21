@@ -1,101 +1,72 @@
-.sign-in-form-wrapper-container {
-    display: -webkit-box;
-    display: -moz-box;
-    display: -ms-flexbox;
-    display: -webkit-flex;
-    display: flex;
-    -webkit-flex-direction: column;
-    flex-direction: column;
+.sign-in-component {
     position: relative;
     max-width: 100%;
     min-width: 250px;
-
     background: #E7E7E7;
 }
-  
-.auth-component-content {
-    background: #fff;
-    -webkit-box-shadow: 0 2px 2px 0 rgba(0,0,0,0.15), 
-                        0 3px 1px -2px rgba(0,0,0,0.13), 
-                        0 1px 5px 0 rgba(0,0,0,0.21);
-    
-    box-shadow: 0 2px 2px 0 rgba(0,0,0,0.15),
-                0 3px 1px -2px rgba(0,0,0,0.13),
-                0 1px 5px 0 rgba(0,0,0,0.21);
 
-    display: -webkit-box;
-    display: -moz-box;
-    display: -ms-flexbox;
-    display: -webkit-flex;
-    display: flex;
-    
-    -webkit-flex-direction: column;
-    flex-direction: column;
-    
+.sign-in-component-content {
+    background: #fff;
     -webkit-box-sizing: border-box;
     box-sizing: border-box;
-    
-    max-width: 100%;
     position: relative;
     z-index: 2;
-
+    max-width: 100%;
     min-height: 97vh;
 }
-.sign-in-form-wrapper {
+
+.sign-in-form-container {
     padding: 24px 24px 36px;
 }
-.sign-in-form-wrapper .form-field.mat-form-field {
+
+.sign-in-form-container .form-field.mat-form-field {
     width: 100%;
 }
-.sign-in-form-wrapper .form-label,
+
+.sign-in-form-container .form-label,
 .restore-container {
     width: 100%;
     text-align: left;
     padding-bottom: 30px;
 }
+
 .restore-container a.mat-button {
     color: #2196F3;
     padding: 0 3px;
     margin-top: 10px;
     margin-left: -3px;
 }
+
 .sign-in-form .submit-container {
     padding: 30px 0 8px;
     text-align: right;
 }
 
 @media (min-width: 600px) {
-    .auth-component-content {
+    .sign-in-component-content {
         -webkit-flex-shrink: 0;
         flex-shrink: 0;
         display: block;
         margin: 0 auto;
         min-height: 0;
         width: 450px;
-     }
-     .sign-in-form-wrapper-container::before,
-     .sign-in-form-wrapper-container::after {
-       flex-grow: 1;
-       -webkit-box-flex: 1;
-       min-height: 30px;
-       display: block;
-       content: '';
-       height: 24px;
-     }
-     .sign-in-form-wrapper-container {
-       display: -webkit-box;
-       display: -moz-box;
-       display: -ms-flexbox;
-       display: -webkit-flex;
-       display: flex;
-       -webkit-flex-direction: column;
-       flex-direction: column;
-       min-height: 100vh;
-       position: relative;
-     }
+    }
+    .sign-in-component::before,
+    .sign-in-component::after {
+        flex-grow: 1;
+        -webkit-box-flex: 1;
+        min-height: 30px;
+        display: block;
+        content: '';
+        height: 24px;
+    }
+    .sign-in-component {
+        min-height: 100vh;
+    }
 }
+
 @media (min-width: 450px) {
-    .sign-in-form-wrapper {
+    .sign-in-form-container {
         padding: 40px 40px 36px;
     }
 }
