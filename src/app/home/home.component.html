@@ -8,12 +8,17 @@
                 [mode]="isMobileView ? 'over' : 'side'" 
                 [opened]="!isMobileView"
                 [disableClose]="!isMobileView">
-                {{isMobileView}}
+                
             </md-sidenav>
             <div class="builder-container">
-                <button type="button" md-button (click)="sidenav.open()">
-                    Open sidenav
-                </button>
+                <div class="work-area-container">
+                    <div class="result-form-container" 
+                        [style.width]="formWidth">
+                        <form>
+                            <div #workArea></div>
+                        </form>
+                    </div>    
+                </div>
             </div>
         </md-sidenav-container>
     </div>
