@@ -10,7 +10,10 @@ import {  MdInputModule,
           MdListModule,
           MdExpansionModule,
           MdDatepickerModule,
-          MdNativeDateModule
+          MdNativeDateModule,
+          MdSlideToggleModule,
+          MdRadioModule,
+          MdCheckboxModule
         } from '@angular/material';
 
 // used to create fake backend
@@ -43,7 +46,10 @@ import { TextFieldComponent } from './home/components/controls/index';
     MdListModule,
     MdExpansionModule,
     MdDatepickerModule,
-    MdNativeDateModule
+    MdNativeDateModule,
+    MdSlideToggleModule,
+    MdRadioModule,
+    MdCheckboxModule
   ],
   declarations: [
     AppComponent,
