@@ -23,7 +23,8 @@ export class FormControlParams {
         public height: number = 0,
         public top: number = 0,
         public left: number = 0,
-        public position: HtmlPosition = HtmlPosition.static) { }
+        public position: HtmlPosition = HtmlPosition.static,
+        public liveMode: boolean = false) { }
 }
 export class InputFormControlParams extends FormControlParams {
 
@@ -34,7 +35,8 @@ export class InputFormControlParams extends FormControlParams {
         width: number = 0,
         height: number = 0,
         top: number = 0,
-        left: number = 0,) {
+        left: number = 0,
+        liveMode: boolean = false) {
 
         super(width, height, top, left, position);
     }

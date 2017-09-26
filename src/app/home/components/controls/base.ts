@@ -1,12 +1,14 @@
-import { Injector } from '@angular/core';
+import { Injector, Output, EventEmitter } from '@angular/core';
 import { HtmlPosition, HtmlInputType } from '../../classes';
 
 export class BaseFormControl {
+    @Output() dragStart = new EventEmitter<DragEvent>();
+    @Output() dragEnd = new EventEmitter<DragEvent>();
     protected width: number = 100;
     protected height: number = 100;
     protected top: number = 0;
     protected left: number = 0;
-
+    protected liveMode: boolean = false;
     private position: HtmlPosition = HtmlPosition.default;
     
     constructor(protected paramsInjector: Injector) {
@@ -15,6 +17,7 @@ export class BaseFormControl {
             this.height = paramsInjector.get('height');
             this.top = paramsInjector.get('top');
             this.left = paramsInjector.get('left');
+            this.liveMode = paramsInjector.get('liveMode');            
             this.position = paramsInjector.get('position');
         } catch (e) {
             console.error('param isn`t specified or specified incorrectly: ', e.toString());

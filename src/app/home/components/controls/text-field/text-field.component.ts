@@ -1,4 +1,4 @@
-import { Component, Input, Injector, OnInit, ViewChild, ElementRef } from '@angular/core';
+import { Component, Input, Output, Injector, OnInit, ViewChild, ElementRef, EventEmitter } from '@angular/core';
 import { InputFormControl } from '../base';
 
 @Component({
@@ -12,5 +12,11 @@ export class TextFieldComponent extends InputFormControl implements OnInit {
         super(paramsInjector);
     }
     ngOnInit() {
+    }
+    draggingStarted(e: DragEvent) {
+        this.dragStart.emit(e);
+    }
+    draggingEnded(e: DragEvent) {
+        this.dragEnd.emit(e);
     }
 }

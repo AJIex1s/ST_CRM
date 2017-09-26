@@ -53,7 +53,19 @@ export class HomeComponent implements OnInit {
         };
         this.createComponent();
     }
+    workAreaComponentDragStart(e: DragEvent, c: ComponentRef<BaseFormControl>) {
 
+    }
+    workAreaComponentDragEnd(e: DragEvent, c: ComponentRef<BaseFormControl>) {
+        let index = this.components.indexOf(c);
+        console.log(index);
+        if(index !== -1) {
+            this.components.splice(index, 1);
+            this.workArea.remove(index);
+        }
+
+    }
+            
     dragStart(e: DragEvent) {
         console.log('start', e);
     }
@@ -89,7 +101,8 @@ export class HomeComponent implements OnInit {
         let component = componentFactory.createComponent(TextFieldComponent, params);
         
         this.workArea.insert(component.hostView);
-        
+        component.instance.dragEnd.subscribe((e: any) => this.workAreaComponentDragEnd(e, component));
+        component.instance.dragStart.subscribe((e: any) => this.workAreaComponentDragStart(e, component));
         this.components.push(component);
     }
 }
