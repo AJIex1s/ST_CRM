@@ -13,14 +13,14 @@ import { MdSidenav } from '@angular/material'
 import { User } from '../models/index';
 import { UserService } from '../services/index';
 
-import { InputFormFieldComponent } from './components/text-field/text-field.component';
+import { TextFieldComponent } from './components/index';
 
 
 @Component({
     moduleId: module.id.toString(),
     templateUrl: 'home.component.html',
     styleUrls: ['home.component.css'],
-    entryComponents: [InputFormFieldComponent]
+    entryComponents: [TextFieldComponent]
 })
 export class HomeComponent implements OnInit {
     @ViewChild('sidenav') sidenav: MdSidenav
@@ -49,7 +49,7 @@ export class HomeComponent implements OnInit {
     }
     createComponent() {
         let data = {
-            component: InputFormFieldComponent, inputs: {
+            component: TextFieldComponent, inputs: {
                 placeholder: "1213",
                 type: 'text',
                 width: 10
