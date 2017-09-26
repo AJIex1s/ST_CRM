@@ -1,4 +1,9 @@
-<md-form-field #formField class="text-field" [style.width]="percentageWidth+'%'">
+<md-form-field 
+    #formField 
+    class="text-field" 
+    [style.width]="width+'%'" 
+    [style.position]="getPositionString()"> 
+    
     <input
         [type]="type"
         mdInput 

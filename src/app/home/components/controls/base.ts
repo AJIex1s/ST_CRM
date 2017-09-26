@@ -7,8 +7,8 @@ export class BaseFormControl {
     protected top: number = 0;
     protected left: number = 0;
 
-    protected position: HtmlPosition = HtmlPosition.default;
-
+    private position: HtmlPosition = HtmlPosition.default;
+    
     constructor(protected paramsInjector: Injector) {
         try {
             this.width = paramsInjector.get('width');
@@ -19,6 +19,10 @@ export class BaseFormControl {
         } catch (e) {
             console.error('param isn`t specified or specified incorrectly: ', e.toString());
         }
+    }
+    getPositionString(): string {
+        return this.position != HtmlPosition.default && this.position != HtmlPosition.static  ?
+            HtmlPosition[this.position] : '';
     }
 }
 

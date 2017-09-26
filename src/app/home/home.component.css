@@ -14,10 +14,15 @@
 .content-wrapper {
     width: 100%;
 }
+/* controls panel */
 .controls-panel {
     width: 70%;
     box-shadow: 3px 0 6px rgba(0,0,0,.24);
 }
+.controls-group {
+    box-shadow: none !important;
+}
+/* end controls panel */
 .content-wrapper,
 .work-area-container,
 .builder-container,

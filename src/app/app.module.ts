@@ -6,7 +6,11 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {  MdInputModule,
           MdFormFieldModule,
           MdButtonModule,
-          MdSidenavModule
+          MdSidenavModule,
+          MdListModule,
+          MdExpansionModule,
+          MdDatepickerModule,
+          MdNativeDateModule
         } from '@angular/material';
 
 // used to create fake backend
@@ -35,7 +39,11 @@ import { TextFieldComponent } from './home/components/controls/index';
     MdFormFieldModule,
     MdInputModule,
     MdButtonModule,
-    MdSidenavModule
+    MdSidenavModule,
+    MdListModule,
+    MdExpansionModule,
+    MdDatepickerModule,
+    MdNativeDateModule
   ],
   declarations: [
     AppComponent,

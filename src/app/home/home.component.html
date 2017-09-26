@@ -9,6 +9,51 @@
                 [opened]="!isMobileView"
                 [disableClose]="!isMobileView">
                 
+                <md-expansion-panel class="controls-group">
+                    <md-expansion-panel-header>
+                        Input controls
+                    </md-expansion-panel-header>
+                    <md-list>
+                        <md-list-item>
+                            <md-form-field>
+                                <input mdInput value="Text Field" disabled>
+                              </md-form-field>
+                        </md-list-item>
+                        <md-list-item>
+                            <md-form-field>
+                                <input mdInput value="Autocomplete control" disabled>
+                            </md-form-field>
+                        </md-list-item>
+                        <md-list-item>
+                            <md-form-field >
+                                <input mdInput [mdDatepicker]="picker" disabled placeholder="Choose a date">
+                                <md-datepicker-toggle mdSuffix [for]="picker"></md-datepicker-toggle>
+                                <md-datepicker #picker></md-datepicker>
+                            </md-form-field>
+                        </md-list-item>
+                    </md-list>
+                </md-expansion-panel>
+
+                <md-divider></md-divider>
+                
+                <md-expansion-panel  class="controls-group">
+                        <md-expansion-panel-header>
+                            Check controls
+                        </md-expansion-panel-header>
+                        123123
+                </md-expansion-panel>
+                
+                <md-divider></md-divider>
+
+                <md-expansion-panel  class="controls-group">
+                        <md-expansion-panel-header>
+                            Other`s
+                        </md-expansion-panel-header>
+                        123123
+                </md-expansion-panel>
+
+                <md-divider></md-divider>
+
             </md-sidenav>
             <div class="builder-container">
                 <div class="work-area-container">
