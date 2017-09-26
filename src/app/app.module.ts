@@ -23,7 +23,7 @@ import { AuthenticationService, UserService } from './services/index';
 
 import { HomeComponent } from './home/index';
 import { SignInComponent } from './sign-in/sign-in.component';
-import { InputFormFieldComponent } from './home/components/input-form-field/input-form-field.component';
+import { TextFieldComponent } from './home/components/controls/index';
 
 @NgModule({
   imports: [
@@ -41,7 +41,7 @@ import { InputFormFieldComponent } from './home/components/input-form-field/inpu
     AppComponent,
     HomeComponent,
     SignInComponent,
-    InputFormFieldComponent
+    TextFieldComponent
   ],
   providers: [
     AuthGuard,

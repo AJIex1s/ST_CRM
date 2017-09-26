@@ -13,8 +13,7 @@ import { MdSidenav } from '@angular/material'
 import { User } from '../models/index';
 import { UserService } from '../services/index';
 
-import { InputFormFieldComponent } from './components/input-form-field/input-form-field.component';
-
+import { InputFormFieldComponent } from './components/text-field/text-field.component';
 
 
 @Component({
