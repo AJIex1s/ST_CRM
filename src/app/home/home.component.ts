@@ -57,22 +57,42 @@ export class HomeComponent implements OnInit {
 
     }
     workAreaComponentDragEnd(e: DragEvent, c: ComponentRef<BaseFormControl>) {
-        let index = this.components.indexOf(c);
-        console.log(index);
-        if(index !== -1) {
-            this.components.splice(index, 1);
-            this.workArea.remove(index);
+        let workAreaElement = (this.workArea.element.nativeElement as HTMLDivElement).parentElement.parentElement;
+        if (!workAreaElement)
+            return;
+        let workAreaBoundingRect = workAreaElement.getBoundingClientRect();
+        let workAreaTop = workAreaBoundingRect.top;
+        let workAreaLeft = workAreaBoundingRect.left;
+        let workAreaBottom = workAreaBoundingRect.bottom;
+        let workAreaRight = workAreaBoundingRect.right;
+
+        let elementBoundingRect = e.srcElement.getBoundingClientRect();
+        let elementTop = e.clientY;
+        let elementLeft = e.clientX;
+        let elementBottom = e.clientY + e.srcElement.clientHeight;
+        let elementRight = e.clientX + e.srcElement.clientWidth;
+        
+        if (elementRight < workAreaTop ||
+            elementBottom < workAreaLeft ||
+            elementLeft > workAreaRight ||
+            elementTop > workAreaBottom) {
+
+            let index = this.components.indexOf(c);
+
+            if (index !== -1) {
+                this.components.splice(index, 1);
+                this.workArea.remove(index);
+            }
         }
 
     }
-            
+
     dragStart(e: DragEvent) {
-        console.log('start', e);
     }
-    
+
     dragEnd(e: DragEvent) {
         let workAreaElement = (this.workArea.element.nativeElement as HTMLDivElement).parentElement.parentElement;
-        if(!workAreaElement)
+        if (!workAreaElement)
             return;
         let workAreaBoundingRect = workAreaElement.getBoundingClientRect();
         let workAreaTop = workAreaBoundingRect.top;
@@ -86,20 +106,19 @@ export class HomeComponent implements OnInit {
         let elementBottom = e.clientY + e.srcElement.clientHeight;
         let elementRight = e.clientX + e.srcElement.clientWidth;
 
-        console.log(elementBoundingRect, workAreaBoundingRect);
-        if(elementTop > workAreaTop && 
-            elementLeft > workAreaLeft && 
-            elementRight < workAreaRight && 
-            elementBottom < workAreaBottom) 
+        if (elementTop > workAreaTop &&
+            elementLeft > workAreaLeft &&
+            elementRight < workAreaRight &&
+            elementBottom < workAreaBottom)
             this.createComponent();
     }
     createComponent() {
         let componentFactory: FormControlComponentsFactory = new FormControlComponentsFactory(this.resolver);
         let params = new InputFormControlParams(HtmlInputType.text,
             'custom placeholder', HtmlPosition.static, 50, 10);
-        
+
         let component = componentFactory.createComponent(TextFieldComponent, params);
-        
+
         this.workArea.insert(component.hostView);
         component.instance.dragEnd.subscribe((e: any) => this.workAreaComponentDragEnd(e, component));
         component.instance.dragStart.subscribe((e: any) => this.workAreaComponentDragStart(e, component));
