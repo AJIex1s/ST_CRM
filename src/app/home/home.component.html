@@ -1,95 +1,23 @@
 <div class="home-component display-flex flex-direction-column">
     <div class="header"></div>
+    
     <div class="content">
         <md-sidenav-container class="content-wrapper">
             <md-sidenav 
                 #sidenav 
-                class="controls-panel" 
+                class="toolbox-panel" 
                 [mode]="isMobileView ? 'over' : 'side'" 
                 [opened]="!isMobileView"
                 [disableClose]="!isMobileView">
-                
-                <md-expansion-panel class="controls-group" expanded="true">
-                    <md-expansion-panel-header>
-                        Input controls
-                    </md-expansion-panel-header>
-                    <md-list>
-                        <md-list-item>
-                            <md-form-field 
-                                class="control-component-view dragable-control"
-                                draggable="true"
-                                (dragstart)="dragStart($event)"
-                                (dragend)="dragEnd($event)">
-                                <input mdInput value="Text Field" disabled>
-                            </md-form-field>
-                        </md-list-item>
-                        <md-list-item>
-                            <md-form-field class="dragable-control">
-                                <input mdInput value="Autocomplete control" disabled>
-                            </md-form-field>
-                        </md-list-item>
-                        <md-list-item>
-                            <md-form-field class="dragable-control">
-                                <input mdInput [mdDatepicker]="picker" disabled placeholder="Choose a date">
-                                <md-datepicker-toggle mdSuffix [for]="picker"></md-datepicker-toggle>
-                                <md-datepicker #picker></md-datepicker>
-                            </md-form-field>
-                        </md-list-item>
-                    </md-list>
-                </md-expansion-panel>
-
-                <md-divider></md-divider>
-                
-                <md-expansion-panel  class="controls-group">
-                        <md-expansion-panel-header>
-                            Check controls
-                        </md-expansion-panel-header>
-                        <md-list>
-                                <md-list-item>
-                                    <md-checkbox disabled class="dragable-control">CheckBox</md-checkbox>
-                                </md-list-item>
-                                <md-list-item>
-                                    <md-radio-group>
-                                        <md-radio-button 
-                                            value="1" 
-                                            disabled 
-                                            class="dragable-control">
-                                            RadioButton
-                                        </md-radio-button>
-                                    </md-radio-group>
-                                </md-list-item>
-                                <md-list-item>
-                                    <md-slide-toggle disabled class="dragable-control">
-                                        Slide Toggle
-                                    </md-slide-toggle>
-                                </md-list-item>
-                            </md-list>
-                </md-expansion-panel>
-                
-                <md-divider></md-divider>
-
-                <md-expansion-panel  class="controls-group">
-                        <md-expansion-panel-header>
-                            Other`s
-                        </md-expansion-panel-header>
-                        123123
-                </md-expansion-panel>
-
-                <md-divider></md-divider>
-
+                <toolbox class="toolbox" #toolbox 
+                    (controlDragingStarted)="toolDragingStarted($event, control)"
+                    (controlDragingEnded)="toolDragingEnded($event, control)">
+                </toolbox>
             </md-sidenav>
-            <div class="builder-container">
-                <div class="work-area-container">
-                    <div class="result-form-container" 
-                        [style.width]="formWidth">
-                        <form class="work-form">
-                            <div #workArea></div>
-                        </form>
-                    </div>    
-                </div>
-            </div>
+            <live-editor #liveEditor></live-editor>
         </md-sidenav-container>
     </div>
+
     <div class="footer"></div>
 
 </div>

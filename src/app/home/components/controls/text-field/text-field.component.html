@@ -1,15 +1,16 @@
 <md-form-field 
     #formField 
     class="text-field" 
-    [ngClass]="{'dragable-control': !liveMode}"
-    [draggable]="!liveMode"
+    [ngClass]="{'dragable-control': !isEnabled}"
+    [draggable]="!isEnabled"
     (dragstart)="draggingStarted($event)"
     (dragend)="draggingEnded($event)"
-    [style.width]="width+'%'" 
+    [style.width]="width ? width+'%' : ''" 
+    [style.width]="height ? height+'%' : ''" 
     [style.position]="getPositionString()"> 
     
     <input
-        [disabled]="!liveMode"
+        [disabled]="!isEnabled"
         [type]="type"
         mdInput 
         [placeholder]="placeholder" />

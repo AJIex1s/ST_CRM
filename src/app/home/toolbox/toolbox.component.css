@@ -1,0 +1,9 @@
+.controls-group {
+    box-shadow: none !important;
+}
+.dragable-control input:hover {
+    cursor: move; 
+    cursor: -webkit-grab;
+    cursor: -moz-grab;
+    cursor: grab;
+}

@@ -3,6 +3,7 @@ import {
     Type,
     ComponentRef,
     ReflectiveInjector,
+    Injectable,
     ComponentFactoryResolver } from '@angular/core';
 
 import { TextFieldComponent, BaseFormControl } from './components/index';
@@ -19,12 +20,12 @@ export enum HtmlInputType {
 }
 export class FormControlParams {
     constructor(
-        public width: number = 0,
-        public height: number = 0,
-        public top: number = 0,
-        public left: number = 0,
+        public width: number = null,
+        public height: number = null,
+        public top: number = null,
+        public left: number = null,
         public position: HtmlPosition = HtmlPosition.static,
-        public liveMode: boolean = false) { }
+        public isEnabled: boolean = false) { }
 }
 export class InputFormControlParams extends FormControlParams {
 
@@ -32,23 +33,26 @@ export class InputFormControlParams extends FormControlParams {
         public type: HtmlInputType = HtmlInputType.text,
         public placeholder: string = '',
         position: HtmlPosition = HtmlPosition.default,
-        width: number = 0,
-        height: number = 0,
-        top: number = 0,
-        left: number = 0,
-        liveMode: boolean = false) {
+        width: number = null,
+        height: number = null,
+        top: number = null,
+        left: number = null,
+        isEnabled: boolean = false) {
 
         super(width, height, top, left, position);
     }
 }
 
+@Injectable()
 export class FormControlComponentsFactory {
     constructor(private resolver: ComponentFactoryResolver) { }
+    
     createComponent(componentType: Type<BaseFormControl>,
         params: FormControlParams): ComponentRef<BaseFormControl> {
-            
-        let data = { inputs: {} };
-        let workArea: any = null;
+
+        if(!params || !componentType)
+            return null;
+
         let paramProviders = Object
             .keys(params)
             .map(paramName => { return { provide: paramName, useValue: params[paramName] }; });
@@ -64,5 +68,9 @@ export class FormControlComponentsFactory {
 
         // We create the component using the factory and the injector
         return factory.create(injector) as ComponentRef<BaseFormControl>;
+    }
+    createTextFieldComponent(): ComponentRef<TextFieldComponent> {
+        let params = new InputFormControlParams(HtmlInputType.text, "Text Field");
+        return this.createComponent(TextFieldComponent, params) as ComponentRef<TextFieldComponent>;
     }
 }

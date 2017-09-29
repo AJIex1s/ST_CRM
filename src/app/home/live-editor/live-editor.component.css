@@ -1,0 +1,16 @@
+.builder-container,
+.work-area-container,
+.result-form-container {
+    box-sizing: border-box;
+    height: 100%;
+}    
+.work-area-container {
+    padding: 20px;
+}
+
+.result-form-container {
+    margin: 0 auto;
+    border: 1px solid black;
+    padding: 20px;
+    width: 450px;
+}
