@@ -18,7 +18,7 @@ import { FormControlComponentsFactory, HtmlInputType, HtmlPosition } from '../cl
 export class LiveEditorComponent {
     @ViewChild('workArea', { read: ViewContainerRef }) private workArea: ViewContainerRef;
 
-    components: ComponentRef<BaseControl>[] = [];
+    controls: ComponentRef<BaseControl>[] = [];
 
     constructor(private componentFactory: FormControlComponentsFactory) {}
 
@@ -26,13 +26,13 @@ export class LiveEditorComponent {
     addControl(type: Type<BaseControl>, params: ControlParams) {
         let control = this.componentFactory.createComponent(type, params);
         this.workArea.insert(control.hostView);
-        this.components.push(control);
+        this.controls.push(control);
     }
-    removeControl(controlComponent: ComponentRef<BaseControl>) {
-        let index = this.components.indexOf(controlComponent);
+    removeControl(control: ComponentRef<BaseControl>) {
+        let index = this.controls.indexOf(control);
 
         if(index > -1) {
-            this.components = this.components.splice(index, 1);
+            this.controls = this.controls.splice(index, 1);
             this.workArea.remove(index);
         }
     }
@@ -40,8 +40,10 @@ export class LiveEditorComponent {
         return (this.workArea.element.nativeElement as HTMLElement).parentElement.parentElement;
     }
 
-    private dragingOver(e: DragEvent) {
+    private dragOver(e: DragEvent) {
         e.preventDefault();
         e.dataTransfer.dropEffect = 'copy';
+    }
+    private dragLeave(e: DragEvent) {
     }
 }

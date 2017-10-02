@@ -7,13 +7,10 @@
     (dragend)="draggingEnded($event)"
     [style.width]="width ? width+'%' : ''" 
     [style.width]="height ? height+'%' : ''" 
-    [style.position]="getPositionString()"
-    [style.cursor]="draging ? 'grabing' : 'grab' "> 
-    
+    [style.position]="getPositionString()"> 
     <input
-        [style.cursor]="draging ? 'grabing' : 'grab' "
         [disabled]="!isEnabled"
         [type]="type"
         mdInput 
-        [placeholder]="draging + ''" />
+        [placeholder]="placeholder" />
 </md-form-field>

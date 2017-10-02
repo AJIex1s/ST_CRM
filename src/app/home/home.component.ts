@@ -61,13 +61,11 @@ export class HomeComponent implements AfterViewInit {
     }
 
     toolDragStart(evt: DragEvent, componentRef: ComponentRef<BaseControl>) {
-        this.controlDraging = true;
     }
     toolDragEnd(evt: DragEvent, componentRef: ComponentRef<BaseControl>) {
         let needToAddElementToEditor = this.needToAddElementToEditor(evt.clientX,
             evt.clientY, evt.srcElement.clientWidth, evt.srcElement.clientHeight);
         if (needToAddElementToEditor)
             this.liveEditor.addControl(componentRef.componentType, componentRef.instance.getParams());
-        this.controlDraging = false;
     }
 }
