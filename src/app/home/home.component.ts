@@ -16,7 +16,7 @@ import { User } from '../models/index';
 import { UserService } from '../services/index';
 
 import { TextFieldComponent, BaseControl, ControlDragEventArgs } from './components/index';
-import { FormControlComponentsFactory, HtmlInputType, HtmlPosition } from './classes';
+import { ControlsFactory, HtmlInputType, HtmlPosition } from './classes';
 import { InputFormControlParams } from './components/base'
 import { ToolboxComponent } from './toolbox/toolbox.component';
 import { LiveEditorComponent } from './live-editor/live-editor.component';
@@ -52,7 +52,7 @@ export class HomeComponent implements AfterViewInit {
     }
     needToAddElementToEditor(elemX: number,
         elemY: number, elemWidth: number, elemHeight: number) {
-        let workArea = this.liveEditor.getWorkAreaElement();
+        let workArea = this.liveEditor.getEditorAreaElement();
         let workAreaBoundingRect = workArea.getBoundingClientRect();
         return (elemX > workAreaBoundingRect.left &&
             elemY > workAreaBoundingRect.top &&
@@ -65,7 +65,9 @@ export class HomeComponent implements AfterViewInit {
     toolDragEnd(evt: DragEvent, componentRef: ComponentRef<BaseControl>) {
         let isDragedToEditor = this.needToAddElementToEditor(evt.clientX,
             evt.clientY, evt.srcElement.clientWidth, evt.srcElement.clientHeight);
-        if (this.liveEditor.dragedIn)
+        if (this.liveEditor.controlOverWorkArea) {
             this.liveEditor.addControl(componentRef.componentType, componentRef.instance.getParams());
+            this.liveEditor.controlOverWorkArea = false;
+        }
     }
 }

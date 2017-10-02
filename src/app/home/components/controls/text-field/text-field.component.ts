@@ -14,21 +14,13 @@ export class TextFieldComponent extends InputFormControl {
     }
     
     private draggingStarted(e: DragEvent) {
-        e.stopPropagation();
-        // e.dataTransfer.effectAllowed = 'copy';
-        // e.dataTransfer.dropEffect = 'copy';
-        (e.srcElement.parentElement.parentElement.parentElement as HTMLElement).style.cursor = 'grab';
         this.draging = true;
-
-        let args: ControlDragEventArgs = { event: e, componentRef: this.componentRef };
+        let args: ControlDragEventArgs = { event: e, componentRef: this.ref };
         this.dragStart.emit(args);
     }
     private draggingEnded(e: DragEvent) {
-        // e.stopPropagation();
-        
-        let args: ControlDragEventArgs = { event: e, componentRef: this.componentRef };
+        let args: ControlDragEventArgs = { event: e, componentRef: this.ref };
         this.dragEnd.emit(args);
-        
         this.draging = false;
     }
 }

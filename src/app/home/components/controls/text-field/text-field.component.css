@@ -14,15 +14,14 @@
     position: relative;
 }
 .dragable-control {
-    z-index: 1000;
+    z-index: 10;
 }
 
 .dragable-control input {
-    z-index: 999;
+    z-index: 9;
     pointer-events: none;
 }
 
-.dragable-control input:active,
 .dragable-control:active {
     cursor: grabbing !important;
     cursor: -moz-grabbing;

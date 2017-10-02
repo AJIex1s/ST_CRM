@@ -25,10 +25,10 @@ export enum HtmlInputType {
 }
 
 @Injectable()
-export class FormControlComponentsFactory {
+export class ControlsFactory {
     constructor(private resolver: ComponentFactoryResolver) { }
     
-    createComponent(componentType: Type<BaseControl>,
+    createControl(componentType: Type<BaseControl>,
         params: ControlParams): ComponentRef<BaseControl> {
 
         if(!params || !componentType)
@@ -45,11 +45,14 @@ export class FormControlComponentsFactory {
         // We create a factory out of the component we want to create
         let factory = this.resolver.resolveComponentFactory(componentType);
 
-        // We create the component using the factory and the injector
-        return factory.create(injector) as ComponentRef<BaseControl>;
+        let componentRef = factory.create(injector) as ComponentRef<BaseControl>;
+
+        componentRef.instance.ref = componentRef;
+
+        return componentRef;
     }
-    createTextFieldComponent(): ComponentRef<TextFieldComponent> {
+    createTextFieldControl(): ComponentRef<TextFieldComponent> {
         let params = new InputFormControlParams(HtmlInputType.text, "Text Field");
-        return this.createComponent(TextFieldComponent, params) as ComponentRef<TextFieldComponent>;
+        return this.createControl(TextFieldComponent, params) as ComponentRef<TextFieldComponent>;
     }
 }

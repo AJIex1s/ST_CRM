@@ -6,7 +6,7 @@ import {
     ComponentFactoryResolver,
     ViewContainerRef
 } from '@angular/core';
-import { FormControlComponentsFactory, HtmlInputType, HtmlPosition } from '../classes';
+import { ControlsFactory, HtmlInputType, HtmlPosition } from '../classes';
 import { BaseControl, TextFieldComponent } from '../components/index';
 
 
@@ -20,7 +20,7 @@ export class ToolboxComponent implements OnInit {
     @ViewChild('textField', { read: ViewContainerRef }) textField: ViewContainerRef;
     public toolComponentControls: Map<ViewContainerRef, ComponentRef<BaseControl>>;
 
-    constructor(private componentFactory: FormControlComponentsFactory) {
+    constructor(private controlsFactory: ControlsFactory) {
         this.toolComponentControls = new Map<ViewContainerRef, ComponentRef<BaseControl>>();
     }
 
@@ -29,9 +29,9 @@ export class ToolboxComponent implements OnInit {
         this.renderToolboxControls();
     }
     private initToolboxControls() {
-        let textFieldControl = this.componentFactory.createTextFieldComponent();
-        textFieldControl.instance.componentRef = textFieldControl;
-        this.toolComponentControls.set(this.textField, textFieldControl);
+        let textFieldRef = this.controlsFactory.createTextFieldControl();
+        textFieldRef.instance.ref = textFieldRef;
+        this.toolComponentControls.set(this.textField, textFieldRef);
     }
     private renderToolboxControls() {
         let keysIterator = this.toolComponentControls.keys();

@@ -1,11 +1,10 @@
-<div class="builder-container" >
-    <div class="work-area-container">
-        <div class="result-form-container" 
-            (dragover)="dragOver($event)"
-            (dragleave)="dragLeave($event)">
-            <form class="work-form">
-                <div #workArea></div>
-            </form>
-        </div>
+<div class="designer-area">
+    <div class="editor-area" 
+        [ngClass] = "{'draging-target': controlOverWorkArea}"
+        (dragover)="dragOver($event)"
+        (dragleave)="dragLeave($event)">
+        <form class="work-form">
+            <div #workArea></div>
+        </form>
     </div>
 </div>

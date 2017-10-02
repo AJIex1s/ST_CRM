@@ -27,7 +27,7 @@ import { routing } from './app.routing';
 
 import { AuthGuard } from './guards/index';
 import { AuthenticationService, UserService } from './services/index';
-import { FormControlComponentsFactory } from './home/classes';
+import { ControlsFactory } from './home/classes';
 
 
 import { ToolboxComponent } from './home/toolbox/toolbox.component';
@@ -69,7 +69,7 @@ import { ELEMENT_PROBE_PROVIDERS } from '@angular/platform-browser/src/dom/debug
         AuthGuard,
         UserService,
         AuthenticationService,
-        FormControlComponentsFactory,
+        ControlsFactory,
 
         // providers used to create fake backend
         fakeBackendProvider,

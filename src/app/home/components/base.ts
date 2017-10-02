@@ -66,7 +66,7 @@ export class BaseControl {
     protected get position(): HtmlPosition { return this.baseParams.position || HtmlPosition.default; };
     protected set position(val: HtmlPosition) { this.baseParams.position = val || HtmlPosition.default; };
 
-    public componentRef: ComponentRef<BaseControl> = null;
+    public ref: ComponentRef<BaseControl> = null;
 
     constructor(protected paramsInjector: Injector) {
         try {

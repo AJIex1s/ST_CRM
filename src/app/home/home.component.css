@@ -43,7 +43,7 @@
 /* end toolbox panel */
 
 /* editor */
-.home-component.control-draging .live-editor .builder-container {
+.home-component.control-draging .live-editor .designer-area {
     cursor: grabbing !important;
     cursor: -moz-grabbing;
     cursor: -webkit-grabbing;
