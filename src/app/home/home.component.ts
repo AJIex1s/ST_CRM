@@ -63,9 +63,9 @@ export class HomeComponent implements AfterViewInit {
     toolDragStart(evt: DragEvent, componentRef: ComponentRef<BaseControl>) {
     }
     toolDragEnd(evt: DragEvent, componentRef: ComponentRef<BaseControl>) {
-        let needToAddElementToEditor = this.needToAddElementToEditor(evt.clientX,
+        let isDragedToEditor = this.needToAddElementToEditor(evt.clientX,
             evt.clientY, evt.srcElement.clientWidth, evt.srcElement.clientHeight);
-        if (needToAddElementToEditor)
+        if (this.liveEditor.dragedIn)
             this.liveEditor.addControl(componentRef.componentType, componentRef.instance.getParams());
     }
 }
