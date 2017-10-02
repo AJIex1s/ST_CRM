@@ -1,5 +1,5 @@
 import { Component, Injector } from '@angular/core';
-import { InputFormControl, FormControlDragEventArgs } from '../base';
+import { InputFormControl, ControlDragEventArgs } from '../../base';
 
 @Component({
     moduleId: module.id.toString(),
@@ -8,15 +8,27 @@ import { InputFormControl, FormControlDragEventArgs } from '../base';
     styleUrls: ['text-field.component.css']
 })
 export class TextFieldComponent extends InputFormControl {
+    public draging: boolean = false;
     constructor(paramsInjector: Injector) {
         super(paramsInjector);
     }
-    draggingStarted(e: DragEvent) {
-        let args: FormControlDragEventArgs = { event: e, componentRef: this.componentRef };
+    
+    private draggingStarted(e: DragEvent) {
+        e.stopPropagation();
+        // e.dataTransfer.effectAllowed = 'copy';
+        // e.dataTransfer.dropEffect = 'copy';
+        (e.srcElement.parentElement.parentElement.parentElement as HTMLElement).style.cursor = 'grab';
+        this.draging = true;
+
+        let args: ControlDragEventArgs = { event: e, componentRef: this.componentRef };
         this.dragStart.emit(args);
     }
-    draggingEnded(e: DragEvent) {
-        let args: FormControlDragEventArgs = { event: e, componentRef: this.componentRef };
+    private draggingEnded(e: DragEvent) {
+        // e.stopPropagation();
+        
+        let args: ControlDragEventArgs = { event: e, componentRef: this.componentRef };
         this.dragEnd.emit(args);
+        
+        this.draging = false;
     }
 }

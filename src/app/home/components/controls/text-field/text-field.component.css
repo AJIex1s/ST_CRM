@@ -1,6 +1,30 @@
-.dragable-control input:hover {
-    cursor: move; 
+.dragable-control,
+.dragable-control input {
+    cursor: move;
     cursor: -webkit-grab;
     cursor: -moz-grab;
-    cursor: grab;
+    cursor: grab !important; 
+    -moz-user-select: none;
+    -khtml-user-select: none;
+    -webkit-user-select: none;
+    user-select: none;
+    /* Required to make elements draggable in old WebKit */
+    -khtml-user-drag: element;
+    -webkit-user-drag: element;
+    position: relative;
+}
+.dragable-control {
+    z-index: 1000;
+}
+
+.dragable-control input {
+    z-index: 999;
+    pointer-events: none;
+}
+
+.dragable-control input:active,
+.dragable-control:active {
+    cursor: grabbing !important;
+    cursor: -moz-grabbing;
+    cursor: -webkit-grabbing;
 }

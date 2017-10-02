@@ -1,6 +1,7 @@
-<div class="builder-container">
+<div class="builder-container" >
     <div class="work-area-container">
-        <div class="result-form-container">
+        <div class="result-form-container" 
+            (dragover)="dragingOver($event)">
             <form class="work-form">
                 <div #workArea></div>
             </form>

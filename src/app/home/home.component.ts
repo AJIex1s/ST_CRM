@@ -15,13 +15,9 @@ import { MdSidenav } from '@angular/material'
 import { User } from '../models/index';
 import { UserService } from '../services/index';
 
-import { TextFieldComponent, BaseFormControl, FormControlDragEventArgs } from './components/index';
-import {
-    InputFormControlParams,
-    FormControlComponentsFactory,
-    HtmlInputType,
-    HtmlPosition
-} from './classes';
+import { TextFieldComponent, BaseControl, ControlDragEventArgs } from './components/index';
+import { FormControlComponentsFactory, HtmlInputType, HtmlPosition } from './classes';
+import { InputFormControlParams } from './components/base'
 import { ToolboxComponent } from './toolbox/toolbox.component';
 import { LiveEditorComponent } from './live-editor/live-editor.component';
 
@@ -33,6 +29,8 @@ import { LiveEditorComponent } from './live-editor/live-editor.component';
     entryComponents: [TextFieldComponent]
 })
 export class HomeComponent implements AfterViewInit {
+    private controlDraging: boolean = false;
+
     @ViewChild('liveEditor', { read: LiveEditorComponent }) liveEditor: LiveEditorComponent;
     @ViewChild('toolbox', { read: ToolboxComponent }) toolbox: ToolboxComponent;
 
@@ -43,10 +41,13 @@ export class HomeComponent implements AfterViewInit {
     constructor() { }
     ngAfterViewInit() {
         let iterator = this.toolbox.toolComponentControls.values();
-        let formControl: ComponentRef<BaseFormControl> = null;
+        let formControl: ComponentRef<BaseControl> = null;
         while (formControl = iterator.next().value) {
             formControl.instance.dragEnd.subscribe(
-                (evtArgs: FormControlDragEventArgs) => this.toolDragEnd(evtArgs.event, evtArgs.componentRef));
+                (evtArgs: ControlDragEventArgs) => this.toolDragEnd(evtArgs.event, evtArgs.componentRef));
+
+            formControl.instance.dragStart.subscribe(
+                (evtArgs: ControlDragEventArgs) => this.toolDragStart(evtArgs.event, evtArgs.componentRef));
         }
     }
     needToAddElementToEditor(elemX: number,
@@ -58,10 +59,15 @@ export class HomeComponent implements AfterViewInit {
             elemX < workAreaBoundingRect.right &&
             elemY < workAreaBoundingRect.bottom);
     }
-    toolDragEnd(evt: DragEvent, componentRef: ComponentRef<BaseFormControl>) {
+
+    toolDragStart(evt: DragEvent, componentRef: ComponentRef<BaseControl>) {
+        this.controlDraging = true;
+    }
+    toolDragEnd(evt: DragEvent, componentRef: ComponentRef<BaseControl>) {
         let needToAddElementToEditor = this.needToAddElementToEditor(evt.clientX,
             evt.clientY, evt.srcElement.clientWidth, evt.srcElement.clientHeight);
         if (needToAddElementToEditor)
             this.liveEditor.addControl(componentRef.componentType, componentRef.instance.getParams());
+        this.controlDraging = false;
     }
 }

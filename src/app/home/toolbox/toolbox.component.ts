@@ -1,4 +1,4 @@
-import { 
+import {
     Component,
     OnInit,
     ComponentRef,
@@ -6,14 +6,8 @@ import {
     ComponentFactoryResolver,
     ViewContainerRef
 } from '@angular/core';
-import { 
-    FormControlComponentsFactory,
-    FormControlParams,
-    InputFormControlParams,
-    HtmlInputType, 
-    HtmlPosition
-} from '../classes';
-import { BaseFormControl, TextFieldComponent } from '../components/index';
+import { FormControlComponentsFactory, HtmlInputType, HtmlPosition } from '../classes';
+import { BaseControl, TextFieldComponent } from '../components/index';
 
 
 @Component({
@@ -24,13 +18,13 @@ import { BaseFormControl, TextFieldComponent } from '../components/index';
 })
 export class ToolboxComponent implements OnInit {
     @ViewChild('textField', { read: ViewContainerRef }) textField: ViewContainerRef;
-    public toolComponentControls: Map<ViewContainerRef, ComponentRef<BaseFormControl>>;
+    public toolComponentControls: Map<ViewContainerRef, ComponentRef<BaseControl>>;
 
     constructor(private componentFactory: FormControlComponentsFactory) {
-        this.toolComponentControls = new Map<ViewContainerRef, ComponentRef<BaseFormControl>>();
+        this.toolComponentControls = new Map<ViewContainerRef, ComponentRef<BaseControl>>();
     }
-    
-    ngOnInit(): void {        
+
+    ngOnInit(): void {
         this.initToolboxControls();
         this.renderToolboxControls();
     }
@@ -42,7 +36,7 @@ export class ToolboxComponent implements OnInit {
     private renderToolboxControls() {
         let keysIterator = this.toolComponentControls.keys();
         let viewContainer: ViewContainerRef = null;
-        while(viewContainer = keysIterator.next().value) {
+        while (viewContainer = keysIterator.next().value) {
             viewContainer.insert(this.toolComponentControls.get(viewContainer).hostView);
         }
     }

@@ -9,6 +9,9 @@
     min-height: 100vh;
     width: 100%;
 }
+.home-component.control-draging {
+    cursor: grabbing;
+}
 .home-component .header,
 .home-component .footer {
     height: 50px;
@@ -39,3 +42,9 @@
 }
 /* end toolbox panel */
 
+/* editor */
+.home-component.control-draging .live-editor .builder-container {
+    cursor: grabbing !important;
+    cursor: -moz-grabbing;
+    cursor: -webkit-grabbing;
+}

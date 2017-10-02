@@ -2,16 +2,12 @@ import { Component,
     ViewChild,
     ViewContainerRef,
     ComponentRef,
-    Type
+    Type,
+    Output,
+    EventEmitter
  } from '@angular/core';
-import { TextFieldComponent, BaseFormControl } from '../components/index';
-import {
-    InputFormControlParams,
-    FormControlComponentsFactory,
-    HtmlInputType,
-    HtmlPosition,
-    FormControlParams
-} from '../classes';
+import { TextFieldComponent, BaseControl, ControlParams } from '../components/index';
+import { FormControlComponentsFactory, HtmlInputType, HtmlPosition } from '../classes';
 
 @Component({
     moduleId: module.id.toString(),
@@ -21,17 +17,18 @@ import {
 })
 export class LiveEditorComponent {
     @ViewChild('workArea', { read: ViewContainerRef }) private workArea: ViewContainerRef;
-    components: ComponentRef<BaseFormControl>[] = [];
+
+    components: ComponentRef<BaseControl>[] = [];
 
     constructor(private componentFactory: FormControlComponentsFactory) {}
 
     
-    addControl(controlComponentType: Type<BaseFormControl>, controlParams: FormControlParams) {
-        let controlComponent = this.componentFactory.createComponent(controlComponentType, controlParams);
-        this.workArea.insert(controlComponent.hostView);
-        this.components.push(controlComponent);
+    addControl(type: Type<BaseControl>, params: ControlParams) {
+        let control = this.componentFactory.createComponent(type, params);
+        this.workArea.insert(control.hostView);
+        this.components.push(control);
     }
-    removeControl(controlComponent: ComponentRef<BaseFormControl>) {
+    removeControl(controlComponent: ComponentRef<BaseControl>) {
         let index = this.components.indexOf(controlComponent);
 
         if(index > -1) {
@@ -41,5 +38,10 @@ export class LiveEditorComponent {
     }
     getWorkAreaElement(): HTMLElement {
         return (this.workArea.element.nativeElement as HTMLElement).parentElement.parentElement;
+    }
+
+    private dragingOver(e: DragEvent) {
+        e.preventDefault();
+        e.dataTransfer.dropEffect = 'copy';
     }
 }
