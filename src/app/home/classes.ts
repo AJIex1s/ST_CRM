@@ -19,6 +19,7 @@ export enum HtmlPosition {
     static,
     default
 }
+
 export enum HtmlInputType {
     text,
     password

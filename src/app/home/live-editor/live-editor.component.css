@@ -12,6 +12,7 @@
     border: 1px solid black;
     padding: 20px;
     width: 450px;
+    position: relative;
 }
 .draging-target.editor-area {
     outline: 2px dashed black;

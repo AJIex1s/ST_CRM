@@ -14,6 +14,13 @@ export class ControlParams {
         return Object.keys(this)
             .map(paramName => { return { provide: paramName, useValue: this[paramName] }; });
     }
+    public clone(): ControlParams {
+        let clone = new ControlParams();
+        Object.keys(this).forEach(param => {
+            clone[param] = this[param];
+        });
+        return clone;
+    }
 
 }
 export class InputFormControlParams extends ControlParams {
@@ -42,10 +49,10 @@ export interface ControlDragEventArgs {
     event: DragEvent;
     componentRef: ComponentRef<BaseControl>;
 }
-
 export class BaseControl {
     @Output() dragStart = new EventEmitter<ControlDragEventArgs>();
     @Output() dragEnd = new EventEmitter<ControlDragEventArgs>();
+
     protected baseParams: ControlParams;
 
     protected get width(): number { return this.baseParams.width || 100; }
@@ -67,7 +74,12 @@ export class BaseControl {
     protected set position(val: HtmlPosition) { this.baseParams.position = val || HtmlPosition.default; };
 
     public ref: ComponentRef<BaseControl> = null;
-
+    public getMainElement() {
+        return this.ref.location.nativeElement as HTMLElement;
+    }
+    public getMainElementBounds() {
+        return this.getMainElement().getBoundingClientRect();
+    }
     constructor(protected paramsInjector: Injector) {
         try {
             this.baseParams = new ControlParams(
@@ -108,10 +120,10 @@ export class InputFormControl extends BaseControl {
     constructor(paramsInjector: Injector) {
         super(paramsInjector);
         this.ownParams = InputFormControlParams.instantiateFromBaseParams(
-                this.baseParams, 
-                paramsInjector.get('type'),
-                paramsInjector.get('placeholder')
-            );
+            this.baseParams,
+            paramsInjector.get('type'),
+            paramsInjector.get('placeholder')
+        );
 
     }
     getParams(): ControlParams {

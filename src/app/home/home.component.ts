@@ -15,7 +15,7 @@ import { MdSidenav } from '@angular/material'
 import { User } from '../models/index';
 import { UserService } from '../services/index';
 
-import { TextFieldComponent, BaseControl, ControlDragEventArgs } from './components/index';
+import { TextFieldComponent, BaseControl, ControlDragEventArgs, ControlParams } from './components/index';
 import { ControlsFactory, HtmlInputType, HtmlPosition } from './classes';
 import { InputFormControlParams } from './components/base'
 import { ToolboxComponent } from './toolbox/toolbox.component';
@@ -62,11 +62,17 @@ export class HomeComponent implements AfterViewInit {
 
     toolDragStart(evt: DragEvent, componentRef: ComponentRef<BaseControl>) {
     }
+    
     toolDragEnd(evt: DragEvent, componentRef: ComponentRef<BaseControl>) {
         let isDragedToEditor = this.needToAddElementToEditor(evt.clientX,
             evt.clientY, evt.srcElement.clientWidth, evt.srcElement.clientHeight);
+        let type: Type<BaseControl>;
+        let params: ControlParams;
+
         if (this.liveEditor.controlOverWorkArea) {
-            this.liveEditor.addControl(componentRef.componentType, componentRef.instance.getParams());
+            type = componentRef.componentType;
+            params = componentRef.instance.getParams().clone();
+            this.liveEditor.addControl(type, params);
             this.liveEditor.controlOverWorkArea = false;
         }
     }
