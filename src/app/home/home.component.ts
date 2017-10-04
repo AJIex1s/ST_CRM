@@ -72,7 +72,7 @@ export class HomeComponent implements AfterViewInit {
         if (this.liveEditor.controlOverWorkArea) {
             type = componentRef.componentType;
             params = componentRef.instance.getParams().clone();
-            this.liveEditor.addControl(type, params);
+            this.liveEditor.createControl(type, params);
             this.liveEditor.controlOverWorkArea = false;
         }
     }

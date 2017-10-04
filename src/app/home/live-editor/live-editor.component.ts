@@ -39,27 +39,68 @@ export class LiveEditorComponent implements OnInit {
         this.whereToInsert = { control: null, position: RelativePosition.bottom };
     }
     ngOnInit() {
-        this.addControl(TextFieldComponent, new InputFormControlParams());
-        this.addControl(TextFieldComponent, new InputFormControlParams());
+        this.createControl(TextFieldComponent, new InputFormControlParams());
     }
     getEditorAreaElement(): HTMLElement {
         return (this.workArea.element.nativeElement as HTMLElement).parentElement.parentElement;
     }
+    private insertControl(controlRef: ComponentRef<BaseControl>) {
+        let i = this.workArea.indexOf(this.whereToInsert.control.hostView);
+        let insertionIndex = null;
+        if (this.whereToInsert.position == RelativePosition.top ||
+            this.whereToInsert.position == RelativePosition.left)
+            insertionIndex = i - 1;
+        else if (this.whereToInsert.position == RelativePosition.bottom ||
+            this.whereToInsert.position == RelativePosition.right)
+            insertionIndex = i + 1;
 
-    addControl(type: Type<BaseControl>, params: ControlParams) {
+        let whereToInsertMainElement = this.whereToInsert.control.instance.getMainElement();
+        if (this.whereToInsert.position == RelativePosition.left ||
+            this.whereToInsert.position == RelativePosition.right) {
+            whereToInsertMainElement.style.width = "50%";
+            whereToInsertMainElement.style.display = 'inline-block';
+            controlRef.instance.getMainElement().style.width = '50%';
+            controlRef.instance.getMainElement().style.display = 'inline-block';
+
+        } else if (this.whereToInsert.position == RelativePosition.top ||
+            this.whereToInsert.position == RelativePosition.bottom) {
+                whereToInsertMainElement.style.width = "100%";
+                whereToInsertMainElement.style.display = 'block';
+                controlRef.instance.getMainElement().style.width = '100%';
+                controlRef.instance.getMainElement().style.display = 'block';    
+        }
+        this.workArea.insert(controlRef.hostView, insertionIndex);
+    }
+    addControl(controlRef: ComponentRef<BaseControl>) {
+        if (this.controls.indexOf(controlRef) === -1)
+            this.controls.push(controlRef);
+        if (this.whereToInsert && this.whereToInsert.control)
+            this.insertControl(controlRef);
+        else {
+            this.workArea.insert(controlRef.hostView);
+            this.controls.push(controlRef);
+        }
+    }
+    createControl(type: Type<BaseControl>, params: ControlParams) {
         if (type == TextFieldComponent || type == InputFormControl) {
             let paramsT: InputFormControlParams = (params as InputFormControlParams);
             paramsT.placeholder += Math.floor(Math.random() % 20 * 100);
             params = paramsT;
         }
         let controlRef = this.controlsFactory.createControl(type, params);
-        this.workArea.insert(controlRef.hostView);
-        this.controls.push(controlRef);
+        this.addControl(controlRef);
         this.subscribeForControlDragEvents(controlRef);
     }
 
-    moveControl(control: ComponentRef<BaseControl>) {
-
+    moveControl(controlRef: ComponentRef<BaseControl>) {
+        if (this.controls.indexOf(controlRef) === -1)
+            this.controls.push(controlRef);
+        if (this.whereToInsert && this.whereToInsert.control)
+            this.insertControl(controlRef);
+        else {
+            this.workArea.insert(controlRef.hostView);
+            this.controls.push(controlRef);
+        }
     }
 
     removeControl(control: ComponentRef<BaseControl>) {
@@ -80,9 +121,13 @@ export class LiveEditorComponent implements OnInit {
         this.activeControl = eArgs.componentRef;
     }
     private controlDragEnd(eArgs: ControlDragEventArgs) {
+        console.log('dragend')
         if (!this.controlOverWorkArea && this.controls.indexOf(eArgs.componentRef) > -1)
             this.removeControl(eArgs.componentRef);
-
+        if (this.whereToInsert && this.whereToInsert.control && this.activeControl) {
+            //this.removeControl(this.activeControl);
+            this.addControl(this.activeControl);
+        }
         this.controlOverWorkArea = false;
     }
     private getControlMinDistanceToPoint(control: ComponentRef<BaseControl>,
