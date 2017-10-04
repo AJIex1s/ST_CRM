@@ -35,3 +35,17 @@ my-app {
     -webkit-flex-direction: column;
     flex-direction: column;
 }
+
+.insert-bottom::after {
+    content: '';
+    position: relative;
+    border-bottom: 3px dashed black;
+    width: 100%;
+    display: block;
+}
+.insert-top::before {
+    display: block;
+    content: '';
+    position: relative;
+    border-top: 3px dashed black;
+}

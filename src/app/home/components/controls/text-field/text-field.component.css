@@ -27,3 +27,7 @@
     cursor: -moz-grabbing;
     cursor: -webkit-grabbing;
 }
+:host {
+    display: block;
+    box-sizing: border-box;
+}

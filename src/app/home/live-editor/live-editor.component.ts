@@ -5,9 +5,18 @@ import {
     ComponentRef,
     Type,
     Output,
-    EventEmitter
+    EventEmitter,
+    OnInit
 } from '@angular/core';
-import { TextFieldComponent, BaseControl, ControlParams, ControlDragEventArgs, InputFormControl, InputFormControlParams } from '../components/index';
+import {
+    TextFieldComponent,
+    BaseControl,
+    ControlParams,
+    ControlDragEventArgs,
+    InputFormControl,
+    InputFormControlParams,
+    RelativePosition
+} from '../components/index';
 import { ControlsFactory, HtmlInputType, HtmlPosition } from '../classes';
 
 @Component({
@@ -16,16 +25,22 @@ import { ControlsFactory, HtmlInputType, HtmlPosition } from '../classes';
     templateUrl: 'live-editor.component.html',
     styleUrls: ['live-editor.component.css']
 })
-export class LiveEditorComponent {
+export class LiveEditorComponent implements OnInit {
     @ViewChild('workArea', { read: ViewContainerRef }) private workArea: ViewContainerRef;
     controlOverWorkArea: boolean = false;
 
     controls: ComponentRef<BaseControl>[] = [];
-    dragingControl: ComponentRef<BaseControl> = null;
+    activeControl: ComponentRef<BaseControl> = null;
+    whereToInsert: { control: ComponentRef<BaseControl>, position: RelativePosition };
 
     constructor(private controlsFactory: ControlsFactory) {
         if (this.controls.length > 0)
             this.controls.forEach(c => this.subscribeForControlDragEvents(c));
+        this.whereToInsert = { control: null, position: RelativePosition.bottom };
+    }
+    ngOnInit() {
+        this.addControl(TextFieldComponent, new InputFormControlParams());
+        this.addControl(TextFieldComponent, new InputFormControlParams());
     }
     getEditorAreaElement(): HTMLElement {
         return (this.workArea.element.nativeElement as HTMLElement).parentElement.parentElement;
@@ -62,7 +77,7 @@ export class LiveEditorComponent {
         control.instance.dragEnd.subscribe((eArgs: ControlDragEventArgs) => this.controlDragEnd(eArgs));
     }
     private controlDragStart(eArgs: ControlDragEventArgs) {
-        this.dragingControl = eArgs.componentRef;
+        this.activeControl = eArgs.componentRef;
     }
     private controlDragEnd(eArgs: ControlDragEventArgs) {
         if (!this.controlOverWorkArea && this.controls.indexOf(eArgs.componentRef) > -1)
@@ -81,7 +96,7 @@ export class LiveEditorComponent {
         let minDy = dYTop >= dYBottom ? dYBottom : dYTop;
         let minDx = dXRight >= dXLeft ? dXRight : dXRight;
 
-        let minDistance = minDx > minDy ? minDx : minDy;
+        let minDistance = minDx > minDy ? minDy : minDx;
 
         return minDistance;
     }
@@ -90,47 +105,56 @@ export class LiveEditorComponent {
         e.preventDefault();
         e.dataTransfer.dropEffect = 'copy';
         this.controlOverWorkArea = true;
-        if (!this.dragingControl)
+        if (!this.activeControl || this.controls.length < 1 || this.controls.some(c => !c.instance))
             return;
         let eX = e.clientX;
         let eY = e.clientY;
-        console.log(eX, eY);
-        let closestControl: ComponentRef<BaseControl> = null;
-        let controlElem: HTMLElement;
-        let controlDistanceMap: Map<ComponentRef<BaseControl>, number> =
-            new Map<ComponentRef<BaseControl>, number>();
+
+        let closestControlBorderDistance = this.controls[0].instance.getClosestBorderDistanceToPoint(eX, eY);
+        this.whereToInsert.control = this.controls[0];
+        this.whereToInsert.position = closestControlBorderDistance.position;
 
         this.controls.forEach(c => {
-            let minDistance = this.getControlMinDistanceToPoint(c, { x: eX, y: eY });
-            controlDistanceMap.set(c, minDistance);
-        });
-        let minVal = controlDistanceMap.values().next().value;
-        controlDistanceMap.forEach((val, key) => {
-            if (val < minVal) {
-                minVal = val;
-                closestControl = key;
+            let cBorderDistance = c.instance.getClosestBorderDistanceToPoint(eX, eY);
+            if (cBorderDistance.distance < closestControlBorderDistance.distance) {
+                closestControlBorderDistance = cBorderDistance;
+                this.whereToInsert.control = c;
+                this.whereToInsert.position = cBorderDistance.position;
             }
         });
-        console.log(closestControl);
-        if(!closestControl)
-            return;
-        if (closestControl.instance.getMainElementBounds().left <= eX ||
-            closestControl.instance.getMainElementBounds().right >= eX) {
-            if (closestControl.instance.getMainElementBounds().top <= eY) {
-                closestControl.instance.getMainElement().style.borderTop = '3px dashed black';
-                console.log('123');
-            }
-            else if (closestControl.instance.getMainElementBounds().bottom >= eY) {
-                closestControl.instance.getMainElement().style.borderBottom = '3px dashed black';
-            }
-        }
-        if (closestControl.instance.getMainElementBounds().top <= eY ||
-            closestControl.instance.getMainElementBounds().bottom >= eY) {
+        this.resetInsertionMarkers();
+        this.drawMarkerWhereToInsert();
+    }
+    private resetInsertionMarkers() {
+        this.controls.forEach(control => {
+            control.instance.getMainElement().style.borderLeft = '';
+            control.instance.getMainElement().style.borderRight = '';
+            control.instance.getMainElement().style.borderTop = '';
+            control.instance.getMainElement().style.borderBottom = '';
+        });
+    }
+    private drawMarkerWhereToInsert() {
+        let control = this.whereToInsert.control;
+        if (this.whereToInsert.position == RelativePosition.top)
+            control.instance.getMainElement().style.borderTop = '3px dashed black';
+        if (this.whereToInsert.position == RelativePosition.bottom)
+            control.instance.getMainElement().style.borderBottom = '3px dashed black';
+        if (this.whereToInsert.position == RelativePosition.left)
+            control.instance.getMainElement().style.borderLeft = '3px dashed black';
+        if (this.whereToInsert.position == RelativePosition.right)
+            control.instance.getMainElement().style.borderRight = '3px dashed black';
+    }
 
-        }
+    private isElementEditorChild(elem: Node) {
+        let editorArea = this.getEditorAreaElement();
+        return editorArea.contains(elem);
     }
     private dragLeave(e: DragEvent) {
+        if (this.isElementEditorChild(e.fromElement))
+            return;
+
+        this.resetInsertionMarkers();
         this.controlOverWorkArea = false;
-        console.log('dragleave');
+        console.log(e);
     }
 }

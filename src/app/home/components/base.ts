@@ -49,10 +49,13 @@ export interface ControlDragEventArgs {
     event: DragEvent;
     componentRef: ComponentRef<BaseControl>;
 }
+export enum RelativePosition {
+    left,
+    right,
+    top,
+    bottom
+}
 export class BaseControl {
-    @Output() dragStart = new EventEmitter<ControlDragEventArgs>();
-    @Output() dragEnd = new EventEmitter<ControlDragEventArgs>();
-
     protected baseParams: ControlParams;
 
     protected get width(): number { return this.baseParams.width || 100; }
@@ -73,13 +76,10 @@ export class BaseControl {
     protected get position(): HtmlPosition { return this.baseParams.position || HtmlPosition.default; };
     protected set position(val: HtmlPosition) { this.baseParams.position = val || HtmlPosition.default; };
 
+    @Output() public dragStart = new EventEmitter<ControlDragEventArgs>();
+    @Output() public dragEnd = new EventEmitter<ControlDragEventArgs>();
     public ref: ComponentRef<BaseControl> = null;
-    public getMainElement() {
-        return this.ref.location.nativeElement as HTMLElement;
-    }
-    public getMainElementBounds() {
-        return this.getMainElement().getBoundingClientRect();
-    }
+
     constructor(protected paramsInjector: Injector) {
         try {
             this.baseParams = new ControlParams(
@@ -96,14 +96,51 @@ export class BaseControl {
         if (this.width > 100 || this.width < 0)
             throw 'Width must be specified in range from 0 to 100';
     }
-    getPositionString(): string {
+    public getMainElement() {
+        return this.ref.location.nativeElement as HTMLElement;
+    }
+    public getMainElementBounds() {
+        return this.getMainElement().getBoundingClientRect();
+    }
+    public getClosestBorderDistanceToPoint(x: number, y: number) {
+        let mainElementBounds = this.getMainElementBounds();
+        let resultPosition = RelativePosition.bottom;
+        let resultDistance = -1;
+
+        let leftDx = Math.abs(mainElementBounds.left - x);
+        let rightDx = Math.abs(mainElementBounds.right - x);
+
+        let topDy = Math.abs(mainElementBounds.top - y);
+        let bottomDy = Math.abs(mainElementBounds.bottom - y);
+
+        let minDy = topDy >= bottomDy ? bottomDy : topDy;
+        let minDx = rightDx >= leftDx ? rightDx : rightDx;
+
+        if(minDx < minDy) {
+            resultDistance = minDx;
+            if(leftDx < rightDx)
+                resultPosition = RelativePosition.left;
+            else
+                resultPosition = RelativePosition.right;    
+        } else {
+            resultDistance = minDy;
+            if(topDy < bottomDy)
+                resultPosition = RelativePosition.top;
+            else
+                resultPosition = RelativePosition.bottom;
+        }
+
+
+        return { position: resultPosition, distance: resultDistance };
+    }
+    public getPositionString(): string {
         return this.position != HtmlPosition.default && this.position != HtmlPosition.static ?
             HtmlPosition[this.position] : '';
     }
-    getParams(): ControlParams {
+    public getParams(): ControlParams {
         return this.baseParams;
     }
-    static getParamsType(): Type<ControlParams> {
+    public static getParamsType(): Type<ControlParams> {
         return ControlParams;
     }
 }
