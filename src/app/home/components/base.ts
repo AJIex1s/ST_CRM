@@ -116,13 +116,13 @@ export class BaseControl {
         let minDy = topDy >= bottomDy ? bottomDy : topDy;
         let minDx = rightDx >= leftDx ? rightDx : rightDx;
 
-        if(minDx < minDy) {
+        if(y > mainElementBounds.top && y < mainElementBounds.bottom) {
             resultDistance = minDx;
             if(leftDx < rightDx)
                 resultPosition = RelativePosition.left;
             else
                 resultPosition = RelativePosition.right;    
-        } else {
+        } else if(x > mainElementBounds.left && x < mainElementBounds.right) {
             resultDistance = minDy;
             if(topDy < bottomDy)
                 resultPosition = RelativePosition.top;
