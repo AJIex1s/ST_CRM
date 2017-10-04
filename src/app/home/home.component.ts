@@ -61,6 +61,8 @@ export class HomeComponent implements AfterViewInit {
     }
 
     toolDragStart(evt: DragEvent, componentRef: ComponentRef<BaseControl>) {
+        //todo fix hack
+        this.liveEditor.activeControl = componentRef;
     }
     
     toolDragEnd(evt: DragEvent, componentRef: ComponentRef<BaseControl>) {

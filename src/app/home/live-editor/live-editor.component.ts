@@ -44,6 +44,42 @@ export class LiveEditorComponent implements OnInit {
     getEditorAreaElement(): HTMLElement {
         return (this.workArea.element.nativeElement as HTMLElement).parentElement.parentElement;
     }
+    
+    addControl(controlRef: ComponentRef<BaseControl>) {
+        if (this.controls.indexOf(controlRef) === -1)
+            this.controls.push(controlRef);
+        if (this.whereToInsert && this.whereToInsert.control)
+            this.insertControl(controlRef);
+        else {
+            this.workArea.insert(controlRef.hostView);
+            this.controls.push(controlRef);
+        }
+    }
+    createControl(type: Type<BaseControl>, params: ControlParams) {
+        if (type == TextFieldComponent || type == InputFormControl) {
+            let paramsT: InputFormControlParams = (params as InputFormControlParams);
+            paramsT.placeholder += Math.floor(Math.random() % 20 * 100);
+            params = paramsT;
+        }
+        let controlRef = this.controlsFactory.createControl(type, params);
+        this.addControl(controlRef);
+        this.subscribeForControlDragEvents(controlRef);
+    }
+
+    moveControl(controlRef: ComponentRef<BaseControl>) {
+        //auto coord calculating 
+        this.addControl(controlRef);
+    }
+
+    removeControl(control: ComponentRef<BaseControl>) {
+        let index = this.controls.indexOf(control);
+
+        if (index > -1) {
+            this.controls = this.controls.splice(index, 1);
+            this.workArea.remove(index);
+            console.log('remove');
+        }
+    }
     private insertControl(controlRef: ComponentRef<BaseControl>) {
         let i = this.workArea.indexOf(this.whereToInsert.control.hostView);
         let insertionIndex = null;
@@ -71,48 +107,6 @@ export class LiveEditorComponent implements OnInit {
         }
         this.workArea.insert(controlRef.hostView, insertionIndex);
     }
-    addControl(controlRef: ComponentRef<BaseControl>) {
-        if (this.controls.indexOf(controlRef) === -1)
-            this.controls.push(controlRef);
-        if (this.whereToInsert && this.whereToInsert.control)
-            this.insertControl(controlRef);
-        else {
-            this.workArea.insert(controlRef.hostView);
-            this.controls.push(controlRef);
-        }
-    }
-    createControl(type: Type<BaseControl>, params: ControlParams) {
-        if (type == TextFieldComponent || type == InputFormControl) {
-            let paramsT: InputFormControlParams = (params as InputFormControlParams);
-            paramsT.placeholder += Math.floor(Math.random() % 20 * 100);
-            params = paramsT;
-        }
-        let controlRef = this.controlsFactory.createControl(type, params);
-        this.addControl(controlRef);
-        this.subscribeForControlDragEvents(controlRef);
-    }
-
-    moveControl(controlRef: ComponentRef<BaseControl>) {
-        if (this.controls.indexOf(controlRef) === -1)
-            this.controls.push(controlRef);
-        if (this.whereToInsert && this.whereToInsert.control)
-            this.insertControl(controlRef);
-        else {
-            this.workArea.insert(controlRef.hostView);
-            this.controls.push(controlRef);
-        }
-    }
-
-    removeControl(control: ComponentRef<BaseControl>) {
-        let index = this.controls.indexOf(control);
-
-        if (index > -1) {
-            this.controls = this.controls.splice(index, 1);
-            this.workArea.remove(index);
-            console.log('remove');
-        }
-    }
-
     private subscribeForControlDragEvents(control: ComponentRef<BaseControl>) {
         control.instance.dragStart.subscribe((eArgs: ControlDragEventArgs) => this.controlDragStart(eArgs));
         control.instance.dragEnd.subscribe((eArgs: ControlDragEventArgs) => this.controlDragEnd(eArgs));
@@ -121,31 +115,16 @@ export class LiveEditorComponent implements OnInit {
         this.activeControl = eArgs.componentRef;
     }
     private controlDragEnd(eArgs: ControlDragEventArgs) {
-        console.log('dragend')
         if (!this.controlOverWorkArea && this.controls.indexOf(eArgs.componentRef) > -1)
             this.removeControl(eArgs.componentRef);
-        if (this.whereToInsert && this.whereToInsert.control && this.activeControl) {
-            //this.removeControl(this.activeControl);
+        if (this.whereToInsert && this.whereToInsert.control && this.activeControl)
             this.addControl(this.activeControl);
-        }
+            
+        this.resetInsertionMarkers();
         this.controlOverWorkArea = false;
     }
-    private getControlMinDistanceToPoint(control: ComponentRef<BaseControl>,
-        point: { x: number, y: number }) {
-        let dXLeft = Math.abs(control.instance.getMainElementBounds().left - point.x);
-        let dXRight = Math.abs(control.instance.getMainElementBounds().right - point.x);
-
-        let dYTop = Math.abs(control.instance.getMainElementBounds().top - point.y);
-        let dYBottom = Math.abs(control.instance.getMainElementBounds().bottom - point.y);
-
-        let minDy = dYTop >= dYBottom ? dYBottom : dYTop;
-        let minDx = dXRight >= dXLeft ? dXRight : dXRight;
-
-        let minDistance = minDx > minDy ? minDy : minDx;
-
-        return minDistance;
-    }
     private getAddingPosition() { }
+
     private dragOver(e: DragEvent) {
         e.preventDefault();
         e.dataTransfer.dropEffect = 'copy';
@@ -172,10 +151,10 @@ export class LiveEditorComponent implements OnInit {
     }
     private resetInsertionMarkers() {
         this.controls.forEach(control => {
-            control.instance.getMainElement().style.borderLeft = '';
-            control.instance.getMainElement().style.borderRight = '';
-            control.instance.getMainElement().style.borderTop = '';
-            control.instance.getMainElement().style.borderBottom = '';
+            control.instance.getMainElement().style.borderLeft = 'none';
+            control.instance.getMainElement().style.borderRight = 'none';
+            control.instance.getMainElement().style.borderTop = 'none';
+            control.instance.getMainElement().style.borderBottom = 'none';
         });
     }
     private drawMarkerWhereToInsert() {
