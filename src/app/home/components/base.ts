@@ -47,7 +47,7 @@ export class InputFormControlParams extends ControlParams {
 
 export interface ControlDragEventArgs {
     event: DragEvent;
-    componentRef: ComponentRef<BaseControl>;
+    componentRef: ComponentRef<BaseFormControl>;
 }
 export enum RelativePosition {
     left,
@@ -55,7 +55,7 @@ export enum RelativePosition {
     top,
     bottom
 }
-export class BaseControl {
+export class BaseFormControl {
     protected baseParams: ControlParams;
 
     protected get width(): number { return this.baseParams.width || 100; }
@@ -78,7 +78,7 @@ export class BaseControl {
 
     @Output() public dragStart = new EventEmitter<ControlDragEventArgs>();
     @Output() public dragEnd = new EventEmitter<ControlDragEventArgs>();
-    public ref: ComponentRef<BaseControl> = null;
+    public ref: ComponentRef<BaseFormControl> = null;
 
     constructor(protected paramsInjector: Injector) {
         try {
@@ -102,37 +102,41 @@ export class BaseControl {
     public getMainElementBounds() {
         return this.getMainElement().getBoundingClientRect();
     }
-    public getClosestBorderDistanceToPoint(x: number, y: number) {
+
+    public calcClosestBorderPositionAndNormalDistance(pointX: number, pointY: number) {
         let mainElementBounds = this.getMainElementBounds();
-        let resultPosition = RelativePosition.bottom;
-        let resultDistance = -1;
+        let borderPosition = RelativePosition.bottom;
+        let distance = null;
 
-        let leftDx = Math.abs(mainElementBounds.left - x);
-        let rightDx = Math.abs(mainElementBounds.right - x);
+        let leftDx = Math.abs(mainElementBounds.left - pointX);
+        let rightDx = Math.abs(mainElementBounds.right - pointX);
 
-        let topDy = Math.abs(mainElementBounds.top - y);
-        let bottomDy = Math.abs(mainElementBounds.bottom - y);
+        let topDy = Math.abs(mainElementBounds.top - pointY);
+        let bottomDy = Math.abs(mainElementBounds.bottom - pointY);
 
         let minDy = topDy >= bottomDy ? bottomDy : topDy;
         let minDx = rightDx >= leftDx ? rightDx : rightDx;
-        resultDistance = minDx <= minDy ? minDx : minDy;
+        distance = minDx <= minDy ? minDx : minDy;
 
-        if(y >= mainElementBounds.top && y <= mainElementBounds.bottom
-        && (x <= mainElementBounds.left || x >= mainElementBounds.right)) {
-            if(leftDx < rightDx)
-                resultPosition = RelativePosition.left;
-            else
-                resultPosition = RelativePosition.right;    
+        if (pointY >= mainElementBounds.top &&
+            pointY <= mainElementBounds.bottom &&
+            (pointX <= mainElementBounds.left || pointX >= mainElementBounds.right)) {
 
-        } else if(x >= mainElementBounds.left && x <= mainElementBounds.right) {
-            if(topDy < bottomDy)
-                resultPosition = RelativePosition.top;
+            if (leftDx < rightDx)
+                borderPosition = RelativePosition.left;
             else
-                resultPosition = RelativePosition.bottom;
+                borderPosition = RelativePosition.right;
+
+        } else {
+
+            if (topDy < bottomDy)
+                borderPosition = RelativePosition.top;
+            else
+                borderPosition = RelativePosition.bottom;
         }
 
 
-        return { position: resultPosition, distance: resultDistance };
+        return { position: borderPosition, distance: distance };
     }
     public getPositionString(): string {
         return this.position != HtmlPosition.default && this.position != HtmlPosition.static ?
@@ -146,7 +150,7 @@ export class BaseControl {
     }
 }
 
-export class InputFormControl extends BaseControl {
+export class InputFormControl extends BaseFormControl {
     private ownParams: InputFormControlParams;
 
     protected get placeholder(): string { return this.ownParams.placeholder; }
