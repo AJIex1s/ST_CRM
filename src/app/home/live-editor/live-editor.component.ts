@@ -10,17 +10,17 @@ import {
 } from '@angular/core';
 import {
     TextFieldComponent,
-    BaseFormControl,
+    BaseFormComoponent,
     ControlParams,
     ControlDragEventArgs,
-    InputFormControl,
+    InputFormComponent,
     InputFormControlParams,
     RelativePosition
 } from '../components/index';
 import { ControlsFactory, HtmlInputType, HtmlPosition } from '../classes';
 
 export interface RelatvePositionData {
-    point: ComponentRef<BaseFormControl>;
+    point: ComponentRef<BaseFormComoponent>;
     relativePosition: RelativePosition;
 }
 
@@ -34,9 +34,9 @@ export class LiveEditorComponent implements OnInit {
     @ViewChild('workArea', { read: ViewContainerRef }) private workArea: ViewContainerRef;
     controlOverWorkArea: boolean = false;
 
-    controls: ComponentRef<BaseFormControl>[] = [];
-    activeControl: ComponentRef<BaseFormControl> = null;
-    whereToInsert: { point: ComponentRef<BaseFormControl>, relativePosition: RelativePosition };
+    controls: ComponentRef<BaseFormComoponent>[] = [];
+    activeControl: ComponentRef<BaseFormComoponent> = null;
+    whereToInsert: { point: ComponentRef<BaseFormComoponent>, relativePosition: RelativePosition };
 
     constructor(private controlsFactory: ControlsFactory) {
         if (this.controls.length > 0)
@@ -51,7 +51,7 @@ export class LiveEditorComponent implements OnInit {
         return (this.workArea.element.nativeElement as HTMLElement).parentElement.parentElement;
     }
 
-    public removeControl(control: ComponentRef<BaseFormControl>) {
+    public removeControl(control: ComponentRef<BaseFormComoponent>) {
         let index = this.controls.indexOf(control);
 
         if (index > -1) {
@@ -60,8 +60,8 @@ export class LiveEditorComponent implements OnInit {
             console.log('remove');
         }
     }
-    public createControl(type: Type<BaseFormControl>, params: ControlParams) {
-        if (type == TextFieldComponent || type == InputFormControl) {
+    public createControl(type: Type<BaseFormComoponent>, params: ControlParams) {
+        if (type == TextFieldComponent || type == InputFormComponent) {
             let paramsT: InputFormControlParams = (params as InputFormControlParams);
             paramsT.placeholder += Math.floor(Math.random() % 20 * 100);
             params = paramsT;
@@ -69,7 +69,7 @@ export class LiveEditorComponent implements OnInit {
         let controlRef = this.controlsFactory.createControl(type, params);
         this.addControl(controlRef);
         this.subscribeForControlDragEvents(controlRef);
-        
+
         this.controlOverWorkArea = false;
         this.resetInsertionMarkers();
     }
@@ -82,7 +82,7 @@ export class LiveEditorComponent implements OnInit {
         });
     }
 
-    private addControl(controlRef: ComponentRef<BaseFormControl>) {
+    private addControl(controlRef: ComponentRef<BaseFormComoponent>) {
         if (this.controls.indexOf(controlRef) === -1)
             this.controls.push(controlRef);
         if (this.whereToInsert && this.whereToInsert.point)
@@ -93,12 +93,14 @@ export class LiveEditorComponent implements OnInit {
         }
     }
 
-    private addControlCore(controlRef: ComponentRef<BaseFormControl>) {
+    private addControlCore(controlRef: ComponentRef<BaseFormComoponent>) {
         let i = this.workArea.indexOf(this.whereToInsert.point.hostView);
         let insertionIndex = null;
+
         if (this.whereToInsert.relativePosition == RelativePosition.top ||
             this.whereToInsert.relativePosition == RelativePosition.left)
             insertionIndex = i - 1;
+
         else if (this.whereToInsert.relativePosition == RelativePosition.bottom ||
             this.whereToInsert.relativePosition == RelativePosition.right)
             insertionIndex = i + 1;
@@ -106,21 +108,28 @@ export class LiveEditorComponent implements OnInit {
         let whereToInsertMainElement = this.whereToInsert.point.instance.getMainElement();
         if (this.whereToInsert.relativePosition == RelativePosition.left ||
             this.whereToInsert.relativePosition == RelativePosition.right) {
-            whereToInsertMainElement.style.width = "50%";
-            whereToInsertMainElement.style.display = 'inline-block';
-            controlRef.instance.getMainElement().style.width = '50%';
-            controlRef.instance.getMainElement().style.display = 'inline-block';
+
+            if (this.whereToInsert.relativePosition == RelativePosition.left) {
+                whereToInsertMainElement.classList.add('last-in-line');
+            }
+            else {
+                controlRef.instance.getMainElement().classList.add('last-in-line');
+            }
+
+            whereToInsertMainElement.classList.add('col-2');
+            controlRef.instance.getMainElement().classList.add('col-2');
+
 
         } else if (this.whereToInsert.relativePosition == RelativePosition.top ||
             this.whereToInsert.relativePosition == RelativePosition.bottom) {
-            whereToInsertMainElement.style.width = "100%";
-            whereToInsertMainElement.style.display = 'block';
-            controlRef.instance.getMainElement().style.width = '100%';
-            controlRef.instance.getMainElement().style.display = 'block';
+            whereToInsertMainElement.classList.remove('col-2');
+            whereToInsertMainElement.classList.remove('last-in-line');
+            controlRef.instance.getMainElement().classList.remove('col-2');
+            controlRef.instance.getMainElement().classList.remove('last-in-line');
         }
         this.workArea.insert(controlRef.hostView, insertionIndex);
     }
-    private subscribeForControlDragEvents(control: ComponentRef<BaseFormControl>) {
+    private subscribeForControlDragEvents(control: ComponentRef<BaseFormComoponent>) {
         control.instance.dragStart.subscribe((eArgs: ControlDragEventArgs) => this.controlDragStart(eArgs));
         control.instance.dragEnd.subscribe((eArgs: ControlDragEventArgs) => this.controlDragEnd(eArgs));
     }

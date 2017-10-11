@@ -47,7 +47,7 @@ export class InputFormControlParams extends ControlParams {
 
 export interface ControlDragEventArgs {
     event: DragEvent;
-    componentRef: ComponentRef<BaseFormControl>;
+    componentRef: ComponentRef<BaseFormComoponent>;
 }
 export enum RelativePosition {
     left,
@@ -55,7 +55,7 @@ export enum RelativePosition {
     top,
     bottom
 }
-export class BaseFormControl {
+export class BaseFormComoponent {
     protected baseParams: ControlParams;
 
     protected get width(): number { return this.baseParams.width || 100; }
@@ -78,7 +78,7 @@ export class BaseFormControl {
 
     @Output() public dragStart = new EventEmitter<ControlDragEventArgs>();
     @Output() public dragEnd = new EventEmitter<ControlDragEventArgs>();
-    public ref: ComponentRef<BaseFormControl> = null;
+    public ref: ComponentRef<BaseFormComoponent> = null;
 
     constructor(protected paramsInjector: Injector) {
         try {
@@ -150,9 +150,9 @@ export class BaseFormControl {
     }
 }
 
-export class InputFormControl extends BaseFormControl {
+export class InputFormComponent extends BaseFormComoponent {
     private ownParams: InputFormControlParams;
-
+    
     protected get placeholder(): string { return this.ownParams.placeholder; }
     protected set placeholder(val: string) { this.ownParams.placeholder = val; }
 

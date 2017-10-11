@@ -31,3 +31,10 @@
     display: block;
     box-sizing: border-box;
 }
+:host(.col-2) {
+    display: inline-block;
+    padding-right: 16px;
+}
+:host(.col-2.last-in-line) {
+    padding-right: 0px;
+}
