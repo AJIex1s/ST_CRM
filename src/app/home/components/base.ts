@@ -47,15 +47,15 @@ export class InputFormControlParams extends ControlParams {
 
 export interface ControlDragEventArgs {
     event: DragEvent;
-    componentRef: ComponentRef<BaseFormControl>;
+    componentRef: ComponentRef<BaseFormComoponent>;
 }
 export enum RelativePosition {
-    left,
-    right,
-    top,
-    bottom
+    Left,
+    Right,
+    Top,
+    Bottom
 }
-export class BaseFormControl {
+export class BaseFormComoponent {
     protected baseParams: ControlParams;
 
     protected get width(): number { return this.baseParams.width || 100; }
@@ -78,7 +78,7 @@ export class BaseFormControl {
 
     @Output() public dragStart = new EventEmitter<ControlDragEventArgs>();
     @Output() public dragEnd = new EventEmitter<ControlDragEventArgs>();
-    public ref: ComponentRef<BaseFormControl> = null;
+    public ref: ComponentRef<BaseFormComoponent> = null;
 
     constructor(protected paramsInjector: Injector) {
         try {
@@ -105,7 +105,7 @@ export class BaseFormControl {
 
     public calcClosestBorderPositionAndNormalDistance(pointX: number, pointY: number) {
         let mainElementBounds = this.getMainElementBounds();
-        let borderPosition = RelativePosition.bottom;
+        let borderPosition = RelativePosition.Bottom;
         let distance = null;
 
         let leftDx = Math.abs(mainElementBounds.left - pointX);
@@ -123,16 +123,16 @@ export class BaseFormControl {
             (pointX <= mainElementBounds.left || pointX >= mainElementBounds.right)) {
 
             if (leftDx < rightDx)
-                borderPosition = RelativePosition.left;
+                borderPosition = RelativePosition.Left;
             else
-                borderPosition = RelativePosition.right;
+                borderPosition = RelativePosition.Right;
 
         } else {
 
             if (topDy < bottomDy)
-                borderPosition = RelativePosition.top;
+                borderPosition = RelativePosition.Top;
             else
-                borderPosition = RelativePosition.bottom;
+                borderPosition = RelativePosition.Bottom;
         }
 
 
@@ -150,9 +150,9 @@ export class BaseFormControl {
     }
 }
 
-export class InputFormControl extends BaseFormControl {
+export class InputFormComponent extends BaseFormComoponent {
     private ownParams: InputFormControlParams;
-
+    
     protected get placeholder(): string { return this.ownParams.placeholder; }
     protected set placeholder(val: string) { this.ownParams.placeholder = val; }
 

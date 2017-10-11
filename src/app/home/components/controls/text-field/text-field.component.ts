@@ -1,5 +1,5 @@
 import { Component, Injector } from '@angular/core';
-import { InputFormControl, ControlDragEventArgs } from '../../base';
+import { InputFormComponent, ControlDragEventArgs } from '../../base';
 
 @Component({
     moduleId: module.id.toString(),
@@ -7,7 +7,7 @@ import { InputFormControl, ControlDragEventArgs } from '../../base';
     templateUrl: 'text-field.component.html',
     styleUrls: ['text-field.component.css']
 })
-export class TextFieldComponent extends InputFormControl {
+export class TextFieldComponent extends InputFormComponent {
     public draging: boolean = false;
     constructor(paramsInjector: Injector) {
         super(paramsInjector);

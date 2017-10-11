@@ -31,3 +31,23 @@
     display: block;
     box-sizing: border-box;
 }
+:host(.col-2) {
+    display: inline-block;
+    margin-right: 16px;
+}
+:host(.col-2.last-in-line) {
+    margin-right: 0px;
+}
+
+:host(.left-marker) {
+    border-left: 3px dashed black;
+}
+:host(.right-marker) {
+    border-right: 3px dashed black;
+}
+:host(.top-marker) {
+    border-top: 3px dashed black;
+}
+:host(.bottom-marker) {
+    border-bottom: 3px dashed black;
+}

@@ -15,7 +15,7 @@ import { MdSidenav } from '@angular/material'
 import { User } from '../models/index';
 import { UserService } from '../services/index';
 
-import { TextFieldComponent, BaseFormControl, ControlDragEventArgs, ControlParams } from './components/index';
+import { TextFieldComponent, BaseFormComoponent, ControlDragEventArgs, ControlParams } from './components/index';
 import { ControlsFactory, HtmlInputType, HtmlPosition } from './classes';
 import { InputFormControlParams } from './components/base'
 import { ToolboxComponent } from './toolbox/toolbox.component';
@@ -40,13 +40,13 @@ export class HomeComponent implements AfterViewInit {
 
     constructor() { }
     ngAfterViewInit() {
-        let iterator = this.toolbox.toolComponentControls.values();
-        let formControl: ComponentRef<BaseFormControl> = null;
-        while (formControl = iterator.next().value) {
-            formControl.instance.dragEnd.subscribe(
+        let iterator = this.toolbox.formComponents.values();
+        let component: ComponentRef<BaseFormComoponent> = null;
+        while (component = iterator.next().value) {
+            component.instance.dragEnd.subscribe(
                 (evtArgs: ControlDragEventArgs) => this.toolDragEnd(evtArgs.event, evtArgs.componentRef));
 
-            formControl.instance.dragStart.subscribe(
+            component.instance.dragStart.subscribe(
                 (evtArgs: ControlDragEventArgs) => this.toolDragStart(evtArgs.event, evtArgs.componentRef));
         }
     }
@@ -60,23 +60,21 @@ export class HomeComponent implements AfterViewInit {
             elemY < workAreaBoundingRect.bottom);
     }
 
-    toolDragStart(evt: DragEvent, componentRef: ComponentRef<BaseFormControl>) {
+    private toolDragStart(evt: DragEvent, componentRef: ComponentRef<BaseFormComoponent>) {
         //todo fix hack
         this.liveEditor.activeControl = componentRef;
     }
     
-    toolDragEnd(evt: DragEvent, componentRef: ComponentRef<BaseFormControl>) {
+    private toolDragEnd(evt: DragEvent, componentRef: ComponentRef<BaseFormComoponent>) {
         let isDragedToEditor = this.needToAddElementToEditor(evt.clientX,
             evt.clientY, evt.srcElement.clientWidth, evt.srcElement.clientHeight);
-        let type: Type<BaseFormControl>;
+        let type: Type<BaseFormComoponent>;
         let params: ControlParams;
 
         if (this.liveEditor.controlOverWorkArea) {
             type = componentRef.componentType;
             params = componentRef.instance.getParams().clone();
             this.liveEditor.createControl(type, params);
-            this.liveEditor.controlOverWorkArea = false;
-            this.liveEditor.resetInsertionMarkers();
         }
     }
 }
