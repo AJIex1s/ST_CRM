@@ -1,0 +1,23 @@
+<div class="home-component display-flex flex-direction-column">
+    <div class="header"></div>
+    
+    <div class="content">
+        <md-sidenav-container class="content-wrapper">
+            <md-sidenav 
+                #sidenav 
+                class="toolbox-panel" 
+                [mode]="isMobileView ? 'over' : 'side'" 
+                [opened]="!isMobileView"
+                [disableClose]="!isMobileView">
+                <toolbox class="toolbox" #toolbox 
+                    (controlDragingStarted)="toolDragingStarted($event, control)"
+                    (controlDragingEnded)="toolDragingEnded($event, control)">
+                </toolbox>
+            </md-sidenav>
+            <live-editor #liveEditor class="live-editor"></live-editor>
+        </md-sidenav-container>
+    </div>
+
+    <div class="footer"></div>
+
+</div>

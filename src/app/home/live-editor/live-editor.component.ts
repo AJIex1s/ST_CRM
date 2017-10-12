@@ -22,9 +22,13 @@ import { ControlsFactory, HtmlInputType, HtmlPosition } from '../classes';
 export class RelativePositionData {
     target: ComponentRef<BaseFormComoponent>;
     position: RelativePosition;
-    constructor() {}
+    constructor() { }
 }
+export class LiveEditor {
+    @ViewChild('workArea', { read: ViewContainerRef }) private workArea: ViewContainerRef;
+    formComponents: Array<Array<ComponentRef<BaseFormComoponent>>>; 
 
+}
 @Component({
     moduleId: module.id.toString(),
     selector: 'live-editor',
@@ -94,7 +98,7 @@ export class LiveEditorComponent implements OnInit {
         }
     }
     addMultiColumnClasses(...components: Array<ComponentRef<BaseFormComoponent>>) {
-        components.forEach(component => 
+        components.forEach(component =>
             component.instance.getMainElement().classList.add('col-2'));
     }
     removeMultiColumnClasses(...components: Array<ComponentRef<BaseFormComoponent>>) {
@@ -109,7 +113,7 @@ export class LiveEditorComponent implements OnInit {
         let insertionIndex = this.workArea.indexOf(target.hostView) - 1;
         this.addMultiColumnClasses(target, insertion);
         target.instance.getMainElement().classList.add('last-in-line');
-        
+
         this.workArea.insert(insertion.hostView, insertionIndex);
     }
     private insertRight(target: ComponentRef<BaseFormComoponent>,
@@ -123,35 +127,37 @@ export class LiveEditorComponent implements OnInit {
     private insertTop(target: ComponentRef<BaseFormComoponent>,
         insertion: ComponentRef<BaseFormComoponent>) {
         let insertionIndex = this.workArea.indexOf(target.hostView) - 1;
-        this.removeMultiColumnClasses(target, insertion);
-        
+        this.removeMultiColumnClasses(insertion);
+        if (target.instance.getMainElement().classList.contains('col-2') &&
+            target.instance.getMainElement().classList.contains('last-in-line'))
+            insertionIndex--;
+
         this.workArea.insert(insertion.hostView, insertionIndex);
     }
     private insertBottom(target: ComponentRef<BaseFormComoponent>,
         insertion: ComponentRef<BaseFormComoponent>) {
         let insertionIndex = this.workArea.indexOf(target.hostView) + 1;
-        this.removeMultiColumnClasses(target, insertion);
-        
+        if (target.instance.getMainElement().classList.contains('col-2') && 
+            !target.instance.getMainElement().classList.contains('last-in-line'))
+            insertionIndex++;
+        this.removeMultiColumnClasses(insertion);
+
         this.workArea.insert(insertion.hostView, insertionIndex);
     }
     private insertComponentCore(insertion: ComponentRef<BaseFormComoponent>, whereToInsert: RelativePositionData) {
-        switch(whereToInsert.position) {
-            case RelativePosition.Left: {
+        switch (+whereToInsert.position) {
+            case RelativePosition.Left:
                 this.insertLeft(whereToInsert.target, insertion);
                 break;
-            }
-            case RelativePosition.Right: {
+            case RelativePosition.Right:
                 this.insertRight(whereToInsert.target, insertion);
                 break;
-            }
-            case RelativePosition.Top: {
+            case RelativePosition.Top:
                 this.insertTop(whereToInsert.target, insertion);
                 break;
-            }
-            case RelativePosition.Bottom: {
+            case RelativePosition.Bottom:
                 this.insertBottom(whereToInsert.target, insertion);
                 break;
-            }
         }
     }
 
@@ -188,7 +194,7 @@ export class LiveEditorComponent implements OnInit {
     private drawMarkerWhereToInsert() {
         let mainElement = this.whereToInsert.target.instance.getMainElement();
         let markerClass: string = '';
-        switch(+this.whereToInsert.position) {
+        switch (+this.whereToInsert.position) {
             case RelativePosition.Left:
                 markerClass = 'left-marker';
                 break;

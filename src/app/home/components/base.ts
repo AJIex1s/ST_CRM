@@ -152,7 +152,7 @@ export class BaseFormComoponent {
 
 export class InputFormComponent extends BaseFormComoponent {
     private ownParams: InputFormControlParams;
-    
+
     protected get placeholder(): string { return this.ownParams.placeholder; }
     protected set placeholder(val: string) { this.ownParams.placeholder = val; }
 
@@ -173,5 +173,54 @@ export class InputFormComponent extends BaseFormComoponent {
     }
     static getParamsType(): Type<ControlParams> {
         return InputFormControlParams;
+    }
+}
+
+export class FormLayoutItemBaseRules {
+
+}
+export class FormLayoutItem {
+    private owner: FormLayout;
+    private itemName: string;
+    private cssRule: CSSRule;
+
+    private getBasestyles() {
+        let width = 'width: 100%;';
+        let height = 'height: 70px;';
+        let textAlign = 'text-align: left;';
+
+        let styles = width + '\n\r' +
+            height + '\n\r' +
+            textAlign + '\n\r';
+
+        return styles;
+    }
+    
+    @Output() public dragStart = new EventEmitter<ControlDragEventArgs>();
+    @Output() public dragEnd = new EventEmitter<ControlDragEventArgs>();
+    constructor(owner: FormLayout) {
+        this.owner = owner;
+        this.createCssRule();
+    }
+
+    private createCssRule() {
+        let index = this.owner.styleSheet.insertRule(
+            '#' + this.itemName + '{' + this.getBasestyles() + '}'
+        );
+        this.cssRule = this.owner.styleSheet.rules.item(index);
+    }
+    changeCssStyle(newStyles: string) {
+        this.cssRule.cssText = '#' + this.itemName + '{' + newStyles + '}';
+    }
+}
+
+export class FormLayoutLine extends FormLayoutItem {
+
+}
+
+export class FormLayout {
+    styleSheet: CSSStyleSheet;
+    constructor(styleSheet: CSSStyleSheet) {
+        this.styleSheet = styleSheet;
     }
 }
