@@ -7,7 +7,7 @@ import {
     ViewContainerRef
 } from '@angular/core';
 import { ControlsFactory, HtmlInputType, HtmlPosition } from '../classes';
-import { BaseFormComoponent, TextFieldComponent } from '../components/index';
+import { BaseFormComponent, TextFieldComponent } from '../components/index';
 
 
 @Component({
@@ -18,10 +18,10 @@ import { BaseFormComoponent, TextFieldComponent } from '../components/index';
 })
 export class ToolboxComponent implements OnInit {
     @ViewChild('textField', { read: ViewContainerRef }) textField: ViewContainerRef;
-    public formComponents: Map<ViewContainerRef, ComponentRef<BaseFormComoponent>>;
+    public formComponents: Map<ViewContainerRef, ComponentRef<BaseFormComponent>>;
 
     constructor(private controlsFactory: ControlsFactory) {
-        this.formComponents = new Map<ViewContainerRef, ComponentRef<BaseFormComoponent>>();
+        this.formComponents = new Map<ViewContainerRef, ComponentRef<BaseFormComponent>>();
     }
 
     ngOnInit(): void {

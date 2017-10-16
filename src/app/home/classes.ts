@@ -8,9 +8,9 @@ import {
 
 import { 
     TextFieldComponent,
-    BaseFormComoponent, 
-    ControlParams, 
-    InputFormControlParams 
+    BaseFormComponent, 
+    ComponentParams, 
+    InputFormComponentParams 
 } from './components/index';
 
 export enum HtmlPosition {
@@ -29,8 +29,8 @@ export enum HtmlInputType {
 export class ControlsFactory {
     constructor(private resolver: ComponentFactoryResolver) { }
     
-    createControl(componentType: Type<BaseFormComoponent>,
-        params: ControlParams): ComponentRef<BaseFormComoponent> {
+    createControl(componentType: Type<BaseFormComponent>,
+        params: ComponentParams): ComponentRef<BaseFormComponent> {
 
         if(!params || !componentType)
             return null;
@@ -46,14 +46,14 @@ export class ControlsFactory {
         // We create a factory out of the component we want to create
         let factory = this.resolver.resolveComponentFactory(componentType);
 
-        let componentRef = factory.create(injector) as ComponentRef<BaseFormComoponent>;
+        let componentRef = factory.create(injector) as ComponentRef<BaseFormComponent>;
 
         componentRef.instance.ref = componentRef;
 
         return componentRef;
     }
     createTextFieldControl(): ComponentRef<TextFieldComponent> {
-        let params = new InputFormControlParams(HtmlInputType.text, "Text Field");
+        let params = new InputFormComponentParams(HtmlInputType.text, "Text Field");
         return this.createControl(TextFieldComponent, params) as ComponentRef<TextFieldComponent>;
     }
 }

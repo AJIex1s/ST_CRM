@@ -1,7 +1,7 @@
 import { Injector, Injectable, Output, EventEmitter, Type, ComponentRef } from '@angular/core';
 import { HtmlPosition, HtmlInputType } from '../classes';
 
-export class ControlParams {
+export class ComponentParams {
     constructor(
         public width: number = null,
         public height: number = null,
@@ -14,8 +14,8 @@ export class ControlParams {
         return Object.keys(this)
             .map(paramName => { return { provide: paramName, useValue: this[paramName] }; });
     }
-    public clone(): ControlParams {
-        let clone = new ControlParams();
+    public clone(): ComponentParams {
+        let clone = new ComponentParams();
         Object.keys(this).forEach(param => {
             clone[param] = this[param];
         });
@@ -23,7 +23,7 @@ export class ControlParams {
     }
 
 }
-export class InputFormControlParams extends ControlParams {
+export class InputFormComponentParams extends ComponentParams {
 
     constructor(
         public type: HtmlInputType = HtmlInputType.text,
@@ -37,17 +37,17 @@ export class InputFormControlParams extends ControlParams {
 
         super(width, height, top, left, position);
     }
-    static instantiateFromBaseParams(params: ControlParams, type: HtmlInputType, placeholder: string) {
-        let inst = params as InputFormControlParams;
+    static instantiateFromBaseParams(params: ComponentParams, type: HtmlInputType, placeholder: string) {
+        let inst = params as InputFormComponentParams;
         inst.placeholder = placeholder;
         inst.type = type;
         return inst;
     }
 }
 
-export interface ControlDragEventArgs {
+export interface ComponentDragEventArgs {
     event: DragEvent;
-    componentRef: ComponentRef<BaseFormComoponent>;
+    componentRef: ComponentRef<BaseFormComponent>;
 }
 export enum RelativePosition {
     Left,
@@ -55,8 +55,8 @@ export enum RelativePosition {
     Top,
     Bottom
 }
-export class BaseFormComoponent {
-    protected baseParams: ControlParams;
+export class BaseFormComponent {
+    protected baseParams: ComponentParams;
 
     protected get width(): number { return this.baseParams.width || 100; }
     protected set width(val: number) { this.baseParams.width = val }
@@ -76,13 +76,13 @@ export class BaseFormComoponent {
     protected get position(): HtmlPosition { return this.baseParams.position || HtmlPosition.default; };
     protected set position(val: HtmlPosition) { this.baseParams.position = val || HtmlPosition.default; };
 
-    @Output() public dragStart = new EventEmitter<ControlDragEventArgs>();
-    @Output() public dragEnd = new EventEmitter<ControlDragEventArgs>();
-    public ref: ComponentRef<BaseFormComoponent> = null;
+    @Output() public dragStart = new EventEmitter<ComponentDragEventArgs>();
+    @Output() public dragEnd = new EventEmitter<ComponentDragEventArgs>();
+    public ref: ComponentRef<BaseFormComponent> = null;
 
     constructor(protected paramsInjector: Injector) {
         try {
-            this.baseParams = new ControlParams(
+            this.baseParams = new ComponentParams(
                 paramsInjector.get('width'),
                 paramsInjector.get('height'),
                 paramsInjector.get('top'),
@@ -142,16 +142,16 @@ export class BaseFormComoponent {
         return this.position != HtmlPosition.default && this.position != HtmlPosition.static ?
             HtmlPosition[this.position] : '';
     }
-    public getParams(): ControlParams {
+    public getParams(): ComponentParams {
         return this.baseParams;
     }
-    public static getParamsType(): Type<ControlParams> {
-        return ControlParams;
+    public static getParamsType(): Type<ComponentParams> {
+        return ComponentParams;
     }
 }
 
-export class InputFormComponent extends BaseFormComoponent {
-    private ownParams: InputFormControlParams;
+export class InputFormComponent extends BaseFormComponent {
+    private ownParams: InputFormComponentParams;
 
     protected get placeholder(): string { return this.ownParams.placeholder; }
     protected set placeholder(val: string) { this.ownParams.placeholder = val; }
@@ -161,66 +161,17 @@ export class InputFormComponent extends BaseFormComoponent {
 
     constructor(paramsInjector: Injector) {
         super(paramsInjector);
-        this.ownParams = InputFormControlParams.instantiateFromBaseParams(
+        this.ownParams = InputFormComponentParams.instantiateFromBaseParams(
             this.baseParams,
             paramsInjector.get('type'),
             paramsInjector.get('placeholder')
         );
 
     }
-    getParams(): ControlParams {
+    getParams(): ComponentParams {
         return this.ownParams;
     }
-    static getParamsType(): Type<ControlParams> {
-        return InputFormControlParams;
-    }
-}
-
-export class FormLayoutItemBaseRules {
-
-}
-export class FormLayoutItem {
-    private owner: FormLayout;
-    private itemName: string;
-    private cssRule: CSSRule;
-
-    private getBasestyles() {
-        let width = 'width: 100%;';
-        let height = 'height: 70px;';
-        let textAlign = 'text-align: left;';
-
-        let styles = width + '\n\r' +
-            height + '\n\r' +
-            textAlign + '\n\r';
-
-        return styles;
-    }
-    
-    @Output() public dragStart = new EventEmitter<ControlDragEventArgs>();
-    @Output() public dragEnd = new EventEmitter<ControlDragEventArgs>();
-    constructor(owner: FormLayout) {
-        this.owner = owner;
-        this.createCssRule();
-    }
-
-    private createCssRule() {
-        let index = this.owner.styleSheet.insertRule(
-            '#' + this.itemName + '{' + this.getBasestyles() + '}'
-        );
-        this.cssRule = this.owner.styleSheet.rules.item(index);
-    }
-    changeCssStyle(newStyles: string) {
-        this.cssRule.cssText = '#' + this.itemName + '{' + newStyles + '}';
-    }
-}
-
-export class FormLayoutLine extends FormLayoutItem {
-
-}
-
-export class FormLayout {
-    styleSheet: CSSStyleSheet;
-    constructor(styleSheet: CSSStyleSheet) {
-        this.styleSheet = styleSheet;
+    static getParamsType(): Type<ComponentParams> {
+        return InputFormComponentParams;
     }
 }

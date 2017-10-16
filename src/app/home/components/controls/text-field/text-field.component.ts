@@ -1,5 +1,5 @@
 import { Component, Injector } from '@angular/core';
-import { InputFormComponent, ControlDragEventArgs } from '../../base';
+import { InputFormComponent, ComponentDragEventArgs } from '../../base';
 
 @Component({
     moduleId: module.id.toString(),
@@ -15,11 +15,11 @@ export class TextFieldComponent extends InputFormComponent {
     
     private draggingStarted(e: DragEvent) {
         this.draging = true;
-        let args: ControlDragEventArgs = { event: e, componentRef: this.ref };
+        let args: ComponentDragEventArgs = { event: e, componentRef: this.ref };
         this.dragStart.emit(args);
     }
     private draggingEnded(e: DragEvent) {
-        let args: ControlDragEventArgs = { event: e, componentRef: this.ref };
+        let args: ComponentDragEventArgs = { event: e, componentRef: this.ref };
         this.dragEnd.emit(args);
         this.draging = false;
     }
