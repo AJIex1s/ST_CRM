@@ -28,8 +28,14 @@ import { routing } from './app.routing';
 import { AuthGuard } from './guards/index';
 import { AuthenticationService, UserService } from './services/index';
 
-import { DesignerComponent } from './homeNew/designer.component';
+import { HomeComponent } from './home/home.component';
+import { TextFieldComponent } from './home/components/controls/index';
+import { ToolboxComponent } from './home/toolbox/toolbox.component';
+import { LiveEditorComponent } from './home/live-editor/live-editor.component';
+import { ControlsFactory } from './home/classes';
+
 import { SignInComponent } from './sign-in/sign-in.component';
+
 
 
 @NgModule({
@@ -53,20 +59,23 @@ import { SignInComponent } from './sign-in/sign-in.component';
     ],
     declarations: [
         AppComponent,
-        DesignerComponent,
+        HomeComponent,
         SignInComponent,
+        TextFieldComponent,
+        ToolboxComponent,
+        LiveEditorComponent
     ],
     providers: [
         AuthGuard,
         UserService,
         AuthenticationService,
-
+        ControlsFactory,
         // providers used to create fake backend
         fakeBackendProvider,
         MockBackend,
         BaseRequestOptions
     ],
-    entryComponents: [ ],
+    entryComponents: [TextFieldComponent],
     bootstrap: [AppComponent]
 })
 export class AppModule { }
