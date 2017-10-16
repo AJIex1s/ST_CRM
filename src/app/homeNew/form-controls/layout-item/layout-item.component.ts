@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ViewContainerRef, ViewChild } from '@angular/core';
 
 @Component({
     moduleId: module.id.toString(),
@@ -7,5 +7,5 @@ import { Component } from '@angular/core';
     styleUrls: ['layout-item.component.css']
 })
 export class LayoutItemComponent {
-    
+    @ViewChild('itemContent', { read: ViewContainerRef }) contentContainer: ViewContainerRef;
 }

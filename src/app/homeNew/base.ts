@@ -85,7 +85,6 @@ export class FormLayout implements IStylesOwner {
     }
 
 }
-
 export class FormLayoutItem implements IStylesOwner {
     private owner: FormLayout;
     private style: Style;
