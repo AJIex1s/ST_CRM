@@ -4,58 +4,7 @@
     </md-expansion-panel-header>
     <md-list>
         <md-list-item>
-            <div style="border: 2px dashed black; width: 195px;">Form Line Item</div>
-        </md-list-item>
-        <md-list-item>
-            <div #textField></div>
-        </md-list-item>
-        <md-list-item>
-            <md-form-field class="dragable-control">
-                <input mdInput value="Autocomplete control" disabled>
-            </md-form-field>
-        </md-list-item>
-        <md-list-item>
-            <md-form-field class="dragable-control">
-                <input mdInput [mdDatepicker]="picker" disabled placeholder="Choose a date">
-                <md-datepicker-toggle mdSuffix [for]="picker"></md-datepicker-toggle>
-                <md-datepicker #picker></md-datepicker>
-            </md-form-field>
+            <div #textField>TextField</div>
         </md-list-item>
     </md-list>
 </md-expansion-panel>
-
-<md-divider></md-divider>
-
-<md-expansion-panel class="controls-group">
-    <md-expansion-panel-header>
-        Check controls
-    </md-expansion-panel-header>
-    <md-list>
-        <md-list-item>
-            <md-checkbox disabled class="dragable-control">CheckBox</md-checkbox>
-        </md-list-item>
-        <md-list-item>
-            <md-radio-group>
-                <md-radio-button value="1" disabled class="dragable-control">
-                    RadioButton
-                </md-radio-button>
-            </md-radio-group>
-        </md-list-item>
-        <md-list-item>
-            <md-slide-toggle disabled class="dragable-control">
-                Slide Toggle
-            </md-slide-toggle>
-        </md-list-item>
-    </md-list>
-</md-expansion-panel>
-
-<md-divider></md-divider>
-
-<md-expansion-panel class="controls-group">
-    <md-expansion-panel-header>
-        Other`s
-    </md-expansion-panel-header>
-    123123
-</md-expansion-panel>
-
-<md-divider></md-divider>

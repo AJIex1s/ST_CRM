@@ -27,15 +27,9 @@ import { routing } from './app.routing';
 
 import { AuthGuard } from './guards/index';
 import { AuthenticationService, UserService } from './services/index';
-import { ControlsFactory } from './home/classes';
 
-
-import { ToolboxComponent } from './home/toolbox/toolbox.component';
-import { LiveEditorComponent } from './home/live-editor/live-editor.component';
-import { HomeComponent } from './home/index';
+import { DesignerComponent } from './homeNew/designer.component';
 import { SignInComponent } from './sign-in/sign-in.component';
-import { TextFieldComponent } from './home/components/controls/index';
-import { ELEMENT_PROBE_PROVIDERS } from '@angular/platform-browser/src/dom/debug/ng_probe';
 
 
 @NgModule({
@@ -59,24 +53,20 @@ import { ELEMENT_PROBE_PROVIDERS } from '@angular/platform-browser/src/dom/debug
     ],
     declarations: [
         AppComponent,
-        HomeComponent,
-        ToolboxComponent,
-        LiveEditorComponent,
+        DesignerComponent,
         SignInComponent,
-        TextFieldComponent,
     ],
     providers: [
         AuthGuard,
         UserService,
         AuthenticationService,
-        ControlsFactory,
 
         // providers used to create fake backend
         fakeBackendProvider,
         MockBackend,
         BaseRequestOptions
     ],
-    entryComponents: [ TextFieldComponent ],
+    entryComponents: [ ],
     bootstrap: [AppComponent]
 })
 export class AppModule { }
