@@ -6,6 +6,8 @@ export class ControlComponentRefCollection {
     constructor() {
         this.items = [];
     }
+    get length(): number { return this.items.length; }
+
     add(item: ComponentRef<ControlComponentBase>) {
         this.items.push(item);
     }
@@ -31,7 +33,20 @@ export class ControlComponentRefCollection {
     forEach(proc: (item: ComponentRef<ControlComponentBase>) => void) {
         this.items.forEach(item => proc(item));
     }
+    forEachInstance(proc: (item: ControlComponentBase) => void) {
+        this.items.forEach(item => proc(item.instance));
+    }
     get(index: number) {
         return this.items[index];
+    }
+    tryGetItemByInstance(inst: ControlComponentBase) {
+        let result: ComponentRef<ControlComponentBase> = null;
+        for(let i = this.items.length - 1; i > 0; i--) {
+            if(this.items[i].instance == inst) {
+                result = this.items[i];
+                break;
+            }
+        }
+        return result;
     }
 }

@@ -5,9 +5,7 @@
     [draggable]="!isEnabled"
     (dragstart)="draggingStarted($event)"
     (dragend)="draggingEnded($event)"
-    [style.width]="width ? width+'%' : ''" 
-    [style.width]="height ? height+'%' : ''" 
-    [style.position]="getPositionString()"> 
+    [style.position]="HTML_POSITION"> 
     <input
         [disabled]="!isEnabled"
         [type]="type"

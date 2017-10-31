@@ -32,7 +32,6 @@ import { HomeComponent } from './home/home.component';
 import { TextFieldComponent } from './home/components/controls/index';
 import { ToolboxComponent } from './home/toolbox/toolbox.component';
 import { LiveEditorComponent } from './home/live-editor/live-editor.component';
-import { ControlsFactory } from './home/classes';
 
 import { SignInComponent } from './sign-in/sign-in.component';
 
@@ -69,7 +68,6 @@ import { SignInComponent } from './sign-in/sign-in.component';
         AuthGuard,
         UserService,
         AuthenticationService,
-        ControlsFactory,
         // providers used to create fake backend
         fakeBackendProvider,
         MockBackend,

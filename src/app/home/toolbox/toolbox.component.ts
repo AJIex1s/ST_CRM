@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { ControlToolboxBase } from '../classes/toolbox';
 
 @Component({
     moduleId: module.id.toString(),
@@ -6,8 +7,9 @@ import { Component } from '@angular/core';
     templateUrl: 'toolbox.component.html',
     styleUrls: ['toolbox.component.css']
 })
-export class ToolboxComponent {
+export class ToolboxComponent extends ControlToolboxBase{
     constructor() {
+        super();
     }
 
 }

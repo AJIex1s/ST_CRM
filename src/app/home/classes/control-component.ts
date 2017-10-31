@@ -1,32 +1,38 @@
 import { Output, EventEmitter, ComponentRef, ViewChild, ElementRef } from "@angular/core";
 import { ControlComponentRefCollection } from "./control-collection";
+import { ControlDragEventArgs } from "./dragging-area";
 
-interface IStyleOwner {}
-interface IControlComponent {}
+interface IStyleOwner { }
+interface IControlComponent { }
+interface IDraggable { }
 
-export class Draggable {
-    @Output() public dragStart = new EventEmitter<DragEvent>();
-    @Output() public dragEnd = new EventEmitter<DragEvent>();
-     
-    private draggingStarted(e: DragEvent) {
-        this.dragStart.emit(e);
-    }
-    private draggingEnded(e: DragEvent) {
-        this.dragEnd.emit(e);
-    }
-}
-
-export class ControlComponentBase extends Draggable implements IControlComponent {
-    private owner: ControlComponentBase;
+export class ControlComponentBase implements IControlComponent, IDraggable {
+    private readonly HTML_POSITION = "";
+    private isEnabled = false;
+    private owner: ControlComponentBase = null;
     private controlsCollection: ControlComponentRefCollection = null;
-    constructor(private mainElement:ElementRef) {
-        super();
-    }
+
+    @Output() public dragStart = new EventEmitter<ControlDragEventArgs>();
+    @Output() public dragEnd = new EventEmitter<ControlDragEventArgs>();
+    public ref: ComponentRef<ControlComponentBase>;
+
+    constructor(private mainElement: ElementRef) {}
+
     public get Owner() { return this.owner; }
     public get ControlsCollection() { return this.controlsCollection; }
+
     
     getMainElement(): HTMLElement {
         return this.mainElement.nativeElement;
+    }
+
+    private draggingStarted(e: DragEvent) {
+        let args = ControlDragEventArgs.createArgs(e, this);
+        this.dragStart.emit(args);
+    }
+    private draggingEnded(e: DragEvent) {
+        let args = ControlDragEventArgs.createArgs(e, this);
+        this.dragEnd.emit(args);
     }
 }
 export class LayoutControlComponent extends ControlComponentBase {
